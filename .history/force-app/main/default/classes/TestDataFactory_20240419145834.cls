@@ -139,39 +139,5 @@ public with sharing class TestDataFactory {
         }
         update accounts;
     }
-
-    // Méthode pour créer un grand nombre de comptes et de commandes pour tester les batches et les triggers
-    public static void createMassiveData(Integer numAccounts, Integer ordersPerAccount) {
-        List<Account> accounts = new List<Account>();
-        List<Order> orders = new List<Order>();
-
-        // Créer un grand nombre de comptes
-        for (Integer i = 0; i < numAccounts; i++) {
-            accounts.add(new Account(Name = 'Test Account ' + i));
-        }
-        insert accounts;
-
-        // Créer un grand nombre de commandes pour chaque compte
-        for (Account acc : accounts) {
-            for (Integer i = 0; i < ordersPerAccount; i++) {
-                orders.add(new Order(AccountId = acc.Id, TotalAmount = 100));
-            }
-        }
-        insert orders;
-    }
-
-    // Método para crear una orden con un monto específico
-    public static Order createOrderWithAmount(Decimal totalAmount) {
-        // Creamos una cuenta asociada a la orden
-        Account testAccount = new Account(Name = 'Test Account');
-        insert testAccount;
-        
-        // Creamos la orden con el monto especificado y la asociamos a la cuenta
-        Order testOrder = new Order(AccountId = testAccount.Id, TotalAmount = totalAmount);
-        insert testOrder;
-        
-        return testOrder;
-    }
+    
 }
-
-

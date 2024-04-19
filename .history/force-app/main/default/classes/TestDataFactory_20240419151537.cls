@@ -160,6 +160,8 @@ public with sharing class TestDataFactory {
         insert orders;
     }
 
+    @isTest
+private class TestDataFactory {
     // Método para crear una orden con un monto específico
     public static Order createOrderWithAmount(Decimal totalAmount) {
         // Creamos una cuenta asociada a la orden
@@ -175,3 +177,4 @@ public with sharing class TestDataFactory {
 }
 
 
+}

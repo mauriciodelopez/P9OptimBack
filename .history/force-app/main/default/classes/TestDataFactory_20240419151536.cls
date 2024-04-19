@@ -160,18 +160,6 @@ public with sharing class TestDataFactory {
         insert orders;
     }
 
-    // Método para crear una orden con un monto específico
-    public static Order createOrderWithAmount(Decimal totalAmount) {
-        // Creamos una cuenta asociada a la orden
-        Account testAccount = new Account(Name = 'Test Account');
-        insert testAccount;
-        
-        // Creamos la orden con el monto especificado y la asociamos a la cuenta
-        Order testOrder = new Order(AccountId = testAccount.Id, TotalAmount = totalAmount);
-        insert testOrder;
-        
-        return testOrder;
-    }
+    
+
 }
-
-
