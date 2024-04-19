@@ -1,0 +1,12 @@
+{
+  "packageDirectories": [
+    {
+      "path": "force-app",
+      "default": true
+    }
+  ],
+  "name": "backApex",
+  "namespace": "",
+  "sfdcLoginUrl": "https://monsieur2-dev-ed.develop.my.salesforce.com",
+  "sourceApiVersion": "59.0"
+}

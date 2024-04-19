@@ -194,38 +194,4 @@ public static Order createOrderWithAmount(Decimal totalAmount) {
     return testOrder;
 }
 
-    // Méthode pour créer un grand nombre de comptes
-    public static List<Account> createMassiveAccounts(Integer numAccounts) {
-        List<Account> accounts = new List<Account>();
-        for (Integer i = 0; i < numAccounts; i++) {
-            accounts.add(new Account(Name = 'Test Account ' + i));
-        }
-        insert accounts;
-        return accounts;
-    }
 
-    // Méthode pour créer des commandes pour une liste de comptes
-    public static void createOrdersForAccounts(List<Account> accounts, Integer ordersPerAccount) {
-        List<Order> orders = new List<Order>();
-        for (Account acc : accounts) {
-            for (Integer i = 0; i < ordersPerAccount; i++) {
-                orders.add(new Order(AccountId = acc.Id));
-            }
-        }
-        insert orders;
-    }
-
-    // Méthode pour créer des éléments de commande pour une liste de comptes
-    public static void createOrderItemsForAccounts(List<Account> accounts, Integer itemsPerAccount) {
-        List<OrderItem> orderItems = new List<OrderItem>();
-        for (Account acc : accounts) {
-            List<Order> orders = [SELECT Id FROM Order WHERE AccountId = :acc.Id];
-            for (Order ord : orders) {
-                for (Integer i = 0; i < itemsPerAccount; i++) {
-                    orderItems.add(new OrderItem(OrderId = ord.Id, UnitPrice = 100, Quantity = 1));
-                }
-            }
-        }
-        insert orderItems;
-    }
-}

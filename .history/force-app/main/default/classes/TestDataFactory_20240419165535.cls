@@ -194,6 +194,7 @@ public static Order createOrderWithAmount(Decimal totalAmount) {
     return testOrder;
 }
 
+public class TestDataFactory {
     // Méthode pour créer un grand nombre de comptes
     public static List<Account> createMassiveAccounts(Integer numAccounts) {
         List<Account> accounts = new List<Account>();
