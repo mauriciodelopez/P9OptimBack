@@ -5,17 +5,9 @@
  * @last modified on  : 04-19-2024
  * @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
 **/
-/**
- * @description       : 
- * @author            : ChangeMeIn@UserSettingsUnder.SFDoc
- * @group             : 
- * @last modified on  : 04-19-2024
- * @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
-**/
 public without sharing class MyTeamOrdersController {
     public List<User> teamMembers { get; set; }
     public Map<Id, Decimal> sumOrdersByUser { get; set; }
-    public Decimal sumOrders { get; set; } // Nouvelle propriété pour stocker la somme totale des commandes
 
     public MyTeamOrdersController() {
         // Vérifie si l'objet User est accessible
@@ -38,11 +30,6 @@ public without sharing class MyTeamOrdersController {
             // Stocker la somme des commandes dans la map, avec l'Id du commercial comme clé
             for (AggregateResult ar : groupedResults) {
                 sumOrdersByUser.put((Id)ar.get('OwnerId'), (Decimal)ar.get('total'));
-            }
-            // Calculer la somme totale des commandes
-            sumOrders = 0;
-            for (Decimal amount : sumOrdersByUser.values()) {
-                sumOrders += amount;
             }
         } else {
             // Gère le cas où l'utilisateur actuel n'a pas accès en lecture à l'objet Order
