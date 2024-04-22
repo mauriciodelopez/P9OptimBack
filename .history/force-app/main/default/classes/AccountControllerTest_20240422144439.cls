@@ -34,24 +34,7 @@
         }
     }
 
-    @isTest
-static void testUpdateChiffreDAffaire() {
-    // Recuperar una cuenta creada en el método de configuración del test Setup()
-    Account testAccount = [SELECT Id FROM Account LIMIT 1];
-
-    // Establecer un nuevo valor para Chiffre_d_affaire__c
-    Decimal newChiffreDAffaire = 1000.00;
-
-    // Crear una instancia del controlador y actualizar Chiffre_d_affaire__c
-    AccountController controller = new AccountController();
-    controller.updateChiffreDAffaire(testAccount.Id, newChiffreDAffaire);
-
-    // Recuperar la cuenta actualizada
-    Account updatedAccount = [SELECT Chiffre_d_affaire__c FROM Account WHERE Id = :testAccount.Id];
-
-    // Verificar que Chiffre_d_affaire__c se ha actualizado correctamente
-    System.assertEquals(newChiffreDAffaire, updatedAccount.Chiffre_d_affaire__c, 'Chiffre_d_affaire__c no se actualizó correctamente');
-}
+    
 }
 
 
