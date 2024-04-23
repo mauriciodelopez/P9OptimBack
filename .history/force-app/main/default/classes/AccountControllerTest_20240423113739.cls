@@ -6,7 +6,7 @@
  * @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
 **/
 @isTest
-public with sharing class AccountControllerTest {
+private class AccountControllerTest {
     static List<Account> accounts;
 
     @testSetup
