@@ -5,13 +5,6 @@
  * @last modified on  : 04-23-2024
  * @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
 **/
-/**
- * @description       : 
- * @author            : ChangeMeIn@UserSettingsUnder.SFDoc
- * @group             : 
- * @last modified on  : 04-23-2024
- * @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
-**/
 @isTest // Cette annotation indique que cette classe est une classe de test.
 public class OrderTriggerHandlerTest {
     @testSetup // Cette annotation indique que la méthode suivante est utilisée pour configurer les données de test.
@@ -21,16 +14,17 @@ public class OrderTriggerHandlerTest {
         insert acc; // Insère le compte dans la base de données.
 
         // Créez une commande pour le compte
-        Order ord = new Order(AccountId=acc.Id, Status='Draft', ShipmentCost__c=10); // Crée un nouvel objet commande lié au compte précédemment créé, avec un statut 'Draft', et des frais de livraison de 10.
+        Order ord = new Order(AccountId=acc.Id, Status='Draft', TotalAmount=100, ShipmentCost__c=10); // Crée un nouvel objet commande lié au compte précédemment créé, avec un statut 'Draft', un montant total de 100 et des frais de livraison de 10.
         insert ord; // Insère la commande dans la base de données.
     }
 
     @isTest // Cette annotation indique que la méthode suivante est une méthode de test.
     static void testBeforeUpdate() {
         // Récupérez la commande
-        Order ord = [SELECT Id, ShipmentCost__c, NetAmount__c FROM Order LIMIT 1]; // Récupère la première commande de la base de données.
+        Order ord = [SELECT Id, TotalAmount, ShipmentCost__c, NetAmount__c FROM Order LIMIT 1]; // Récupère la première commande de la base de données.
 
         // Mettez à jour la commande
+        ord.TotalAmount = 200; // Modifie le montant total de la commande à 200.
         ord.ShipmentCost__c = 20; // Modifie les frais de livraison de la commande à 20.
 
         Test.startTest(); // Démarre la partie du test qui est réellement mesurée.
