@@ -16,7 +16,7 @@ public class UpdateAccountsBatchTest {
         // Créer des comptes de test
         testAccounts = TestDataFactory.createMassiveAccounts(200);
         // Créer des commandes de test associées à ces comptes
-        TestDataFactory.createOrdersForAccounts(testAccounts, 200);
+        TestDataFactory.createOrdersForAccounts(testAccounts, 00);
         // Créer des éléments de commande pour chaque commande
         TestDataFactory.createOrderItemsForAccounts(testAccounts, 5);
     }
