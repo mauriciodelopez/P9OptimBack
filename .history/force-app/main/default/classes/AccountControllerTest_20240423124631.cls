@@ -34,11 +34,9 @@ public with sharing class AccountControllerTest {
         // Créer une instance de AccountController
         AccountController controller = new AccountController();
 
-        Test.startTest();
+        Test.star
         // Appeler la méthode updateChiffreDAffaire() pour mettre à jour le champ Chiffre_d_affaire__c des comptes
         controller.updateChiffreDAffaire(accounts);
-        Test.stopTest();
-        
         // Récupérer les comptes mis à jour
         accounts = [SELECT Id, Chiffre_d_affaire__c FROM Account WHERE Id IN :accounts];
         // Vérifier que le champ Chiffre_d_affaire__c a été mis à jour correctement pour chaque compte
