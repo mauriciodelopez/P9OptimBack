@@ -12,7 +12,7 @@ public with sharing class AccountControllerTest {
     @testSetup
     static void setup() {
         // Créer des comptes de test
-        accounts = TestDataFactory.createAccounts(200);
+        accounts = TestDataFactory.createAccounts();
         for (Account a : accounts) {
             a.Id = null; // Remove the Id field
         }
@@ -25,9 +25,9 @@ public with sharing class AccountControllerTest {
 
         // Récupérer les comptes créés dans la méthode de configuration du test Setup()
         accounts = [SELECT Id, Name FROM Account];
-        Systemout.println('Accounts retrieved: ' + accounts.size());
+
         // Vérifier que le nombre de comptes créés correspond au nombre attendu
-        System.assertEquals(200, accounts.size(), ': =+ Le nombre de comptes créés ne correspond pas au nombre attendu');
+        System.assertEquals(200, accounts.size(), 'Le nombre de comptes créés ne correspond pas au nombre attendu');
 
         // Vérifier que le nom de chaque compte correspond au modèle attendu
         for(Integer i = 0; i < accounts.size(); i++) {

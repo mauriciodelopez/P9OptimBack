@@ -12,13 +12,6 @@ public with sharing class TestDataFactory {
         if (!Schema.sObjectType.Account.isCreateable()) {
             throw new SecurityException('You do not have permission to create account records.');
         }
-        for(Integer i = 0; i < numAccounts; i++) {
-            Account a = new Account();
-            a.Name = 'Test Account ' + (i + 1);
-            // Configura cualquier otro campo necesario aquí
-            accounts.add(a);
-        }
-        return accounts;
     }
 
 public static List<Order> createOrdersForAccounts(List<Account> accounts, Integer numOrdersPerAccount) {

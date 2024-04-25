@@ -11,7 +11,7 @@ public with sharing class AccountController {
     //Méthode pour mettre à jour le champ Chiffre_d_affaire__c dans les enregistrements de Compte.
     public void updateChiffreDAffaire(List<Account> accounts) {
          // Verifica si la lista de cuentas es null
-        if (accounts == null) {
+         if (accounts == null) {
             System.debug('The list of accounts is null');
             return;
         }

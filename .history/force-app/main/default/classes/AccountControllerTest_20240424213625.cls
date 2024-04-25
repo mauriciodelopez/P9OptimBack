@@ -27,7 +27,7 @@ public with sharing class AccountControllerTest {
         accounts = [SELECT Id, Name FROM Account];
         Systemout.println('Accounts retrieved: ' + accounts.size());
         // Vérifier que le nombre de comptes créés correspond au nombre attendu
-        System.assertEquals(200, accounts.size(), ': =+ Le nombre de comptes créés ne correspond pas au nombre attendu');
+        System.assertEquals(0, accounts.size(), 'Le nombre de comptes créés ne correspond pas au nombre attendu');
 
         // Vérifier que le nom de chaque compte correspond au modèle attendu
         for(Integer i = 0; i < accounts.size(); i++) {

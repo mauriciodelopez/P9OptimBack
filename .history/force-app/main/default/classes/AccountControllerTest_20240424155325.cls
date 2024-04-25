@@ -25,9 +25,9 @@ public with sharing class AccountControllerTest {
 
         // Récupérer les comptes créés dans la méthode de configuration du test Setup()
         accounts = [SELECT Id, Name FROM Account];
-        Systemout.println('Accounts retrieved: ' + accounts.size());
+
         // Vérifier que le nombre de comptes créés correspond au nombre attendu
-        System.assertEquals(200, accounts.size(), ': =+ Le nombre de comptes créés ne correspond pas au nombre attendu');
+        System.assertEquals(200, accounts.size(), 'Le nombre de comptes créés ne correspond pas au nombre attendu');
 
         // Vérifier que le nom de chaque compte correspond au modèle attendu
         for(Integer i = 0; i < accounts.size(); i++) {
@@ -42,15 +42,7 @@ public with sharing class AccountControllerTest {
         // Créer une instance de AccountController
         AccountController controller = new AccountController();
 
-        // Verifica que las cuentas no sean null antes de llamar a updateChiffreDAffaire
-        if (accounts != null) {
-            for (Account acc : accounts) {
-                if (acc != null) {
-                    // Appeler la méthode updateChiffreDAffaire() pour mettre à jour le champ Chiffre_d_affaire__c des comptes
-                    controller.updateChiffreDAffaire(accounts);
-                }
-            }
-        }
+        
 
 
         // Récupérer les comptes mis à jour

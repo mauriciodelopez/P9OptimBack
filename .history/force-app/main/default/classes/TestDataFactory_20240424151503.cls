@@ -7,17 +7,17 @@
 **/
 @isTest
 public with sharing class TestDataFactory {
-    List<Account> accounts = new List<Account>();  
     public static List<Account> createAccounts(Integer numAccounts) {
         if (!Schema.sObjectType.Account.isCreateable()) {
             throw new SecurityException('You do not have permission to create account records.');
         }
-        for(Integer i = 0; i < numAccounts; i++) {
-            Account a = new Account();
-            a.Name = 'Test Account ' + (i + 1);
-            // Configura cualquier otro campo necesario aquí
+
+        accounts = new List<Account>();
+        for (Integer i = 0; i < numAccounts; i++) {
+            Account a = new Account(Name = 'Test Account ' + i);
             accounts.add(a);
         }
+        insert accounts;
         return accounts;
     }
 
@@ -36,20 +36,6 @@ public static List<Order> createOrdersForAccounts(List<Account> accounts, Intege
     return orders;
 }
 
-public static List<Order> createOrders(List<Account> accounts, Integer numOrders) {
-    if (!Schema.sObjectType.Order.isCreateable()) {
-        throw new SecurityException('You do not have permission to create order records.');
-    }
-
-    List<Order> orders = new List<Order>();
-    Integer numAccounts = accounts.size();
-    for(Integer i = 0; i < numOrders; i++) {
-        Integer randomIndex = Math.mod(i, numAccounts);
-        orders.add(new Order(AccountId = accounts[randomIndex].Id, EffectiveDate = System.today(), Status = 'Draft'));
-    }
-    insert orders;
-    return orders;        
-}
 
 public static List<OrderItem> createOrderItems(List<Order> orders, Double unitPricePerItem, Integer quantityPerItem, Integer numItemsPerOrder) {
     if (!Schema.sObjectType.OrderItem.isCreateable()) {

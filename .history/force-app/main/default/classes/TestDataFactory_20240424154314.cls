@@ -6,18 +6,16 @@
  * @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
 **/
 @isTest
-public with sharing class TestDataFactory {
-    List<Account> accounts = new List<Account>();  
+public with sharing class TestDataFactory {   
     public static List<Account> createAccounts(Integer numAccounts) {
         if (!Schema.sObjectType.Account.isCreateable()) {
             throw new SecurityException('You do not have permission to create account records.');
         }
-        for(Integer i = 0; i < numAccounts; i++) {
-            Account a = new Account();
-            a.Name = 'Test Account ' + (i + 1);
-            // Configura cualquier otro campo necesario aquí
+        for (Integer i = 0; i < numAccounts; i++) {
+            Account a = new Account(Name = 'Test Account ' + i);
             accounts.add(a);
         }
+        insert accounts;
         return accounts;
     }
 

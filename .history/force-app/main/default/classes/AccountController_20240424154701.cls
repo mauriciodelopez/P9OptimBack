@@ -10,19 +10,7 @@
 public with sharing class AccountController {
     //Méthode pour mettre à jour le champ Chiffre_d_affaire__c dans les enregistrements de Compte.
     public void updateChiffreDAffaire(List<Account> accounts) {
-         // Verifica si la lista de cuentas es null
-        if (accounts == null) {
-            System.debug('The list of accounts is null');
-            return;
-        }
-
-        // Verifica si la lista de cuentas contiene cuentas null
-        for (Account acc : accounts) {
-            if (acc == null) {
-                System.debug('The list of accounts contains null accounts');
-                return;
-            }
-        }
+        
         // Vérifie si l'utilisateur actuel a des autorisations de mise à jour sur l'objet Compte    
         if (!Schema.sObjectType.Account.isUpdateable()) {
             // Gère le cas où l'utilisateur actuel n'a pas d'accès en écriture à l'objet Compte
