@@ -68,18 +68,17 @@ public with sharing class AccountControllerTest {
         Date effectiveDate = Date.today();
         String status = 'Draft';
 
-        //Declarer la liste pour stocker les ordres créés
-        List<Order> orders = new List<Order>();
-
         //Créer une commande pour chaque compte avec un montant de 50€
         for (Account acc : accounts) {
-            //Créer l'order l'ajouté à la liste des orders
             Order order = TestDataFactory.createOrderWithAmount(50.0, effectiveDate, status);
             order.AccountId = acc.Id;// set the accountId on the Order
             orders.add(order);// add the order to the list of orders
         }
         // Insert the new orders
         insert orders;
+        
+        acc.Orders.add(order);
+        }
         
         //Start the test context
         Test.startTest();

@@ -68,19 +68,10 @@ public with sharing class AccountControllerTest {
         Date effectiveDate = Date.today();
         String status = 'Draft';
 
-        //Declarer la liste pour stocker les ordres créés
-        List<Order> orders = new List<Order>();
-
         //Créer une commande pour chaque compte avec un montant de 50€
         for (Account acc : accounts) {
-            //Créer l'order l'ajouté à la liste des orders
-            Order order = TestDataFactory.createOrderWithAmount(50.0, effectiveDate, status);
-            order.AccountId = acc.Id;// set the accountId on the Order
-            orders.add(order);// add the order to the list of orders
+            TestDataFactory.createOrderWithAmount(50, effectiveDate, status);
         }
-        // Insert the new orders
-        insert orders;
-        
         //Start the test context
         Test.startTest();
 
@@ -93,7 +84,7 @@ public with sharing class AccountControllerTest {
         // Vérifier que le CA Chiffre_d_affaires__c de chaque compte a été mis à jour correctement
         List<Account> updatedAccounts = [SELECT Id, Chiffre_d_affaire__c FROM Account WHERE Id IN :accounts];
         for(Account accUpdated : updatedAccounts) {
-            System.assertEquals(50.0, accUpdated.Chiffre_d_affaire__c, 'Le champ Chiffre_d_affaires__c n\'a pas été mis à jour correctement');
+            System.assertEquals(50, accUpdated.Chiffre_d_affaire__c, 'Le champ Chiffre_d_affaires__c n\'a pas été mis à jour correctement');
         }
     }
 
@@ -129,7 +120,7 @@ public with sharing class AccountControllerTest {
         //boucle for qui itère à travers chaque compte dans la liste updatedAccounts. À chaque itération, le compte mis à jour est référencé par la variable accUpdated.
         for(Account accUpdated : updatedAccounts) {
             Decimal initialCA = initialCAs.get(accUpdated.Id);//Cette ligne récupère le chiffre d'affaires initial du compte à partir de la map initialCAs, en utilisant l'ID du compte (accUpdated.Id) comme clé. La valeur correspondante (le chiffre d'affaires initial) est stockée dans la variable initialCA
-            Decimal expectedCA = initialCA != null ? initialCA + 50.0 : 50.0;//Cette ligne calcule le chiffre d'affaires attendu après l'ajout de la nouvelle commande. Si le chiffre d'affaires initial (initialCA) n'est pas nul, alors le nouveau chiffre d'affaires sera égal à l'ancien chiffre d'affaires plus 50. Sinon, si le chiffre d'affaires initial est nul (ce qui signifie qu'il n'y avait pas de chiffre d'affaires précédent), le nouveau chiffre d'affaires sera simplement de 50.
+            Decimal expectedCA = initialCA != null ? initialCA + 50 : 50;//Cette ligne calcule le chiffre d'affaires attendu après l'ajout de la nouvelle commande. Si le chiffre d'affaires initial (initialCA) n'est pas nul, alors le nouveau chiffre d'affaires sera égal à l'ancien chiffre d'affaires plus 50. Sinon, si le chiffre d'affaires initial est nul (ce qui signifie qu'il n'y avait pas de chiffre d'affaires précédent), le nouveau chiffre d'affaires sera simplement de 50.
             System.assertEquals(expectedCA, accUpdated.Chiffre_d_affaire__c, 'Le champ Chiffre_d_affaire__c n\'a pas été mis à jour correctement avec l\'ajout de la nouvelle commande (montant 50€).');    
         }
     }

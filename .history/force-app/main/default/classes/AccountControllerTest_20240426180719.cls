@@ -81,6 +81,10 @@ public with sharing class AccountControllerTest {
         // Insert the new orders
         insert orders;
         
+        acc.Orders.add(order);
+
+    
+
         //Start the test context
         Test.startTest();
 

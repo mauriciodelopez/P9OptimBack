@@ -73,7 +73,7 @@ public with sharing class AccountControllerTest {
 
         //Créer une commande pour chaque compte avec un montant de 50€
         for (Account acc : accounts) {
-            //Créer l'order l'ajouté à la liste des orders
+            //Créer l'order 
             Order order = TestDataFactory.createOrderWithAmount(50.0, effectiveDate, status);
             order.AccountId = acc.Id;// set the accountId on the Order
             orders.add(order);// add the order to the list of orders
@@ -81,6 +81,10 @@ public with sharing class AccountControllerTest {
         // Insert the new orders
         insert orders;
         
+        acc.Orders.add(order);
+
+    
+
         //Start the test context
         Test.startTest();
 

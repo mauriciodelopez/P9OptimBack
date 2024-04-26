@@ -149,25 +149,31 @@ public with sharing class TestDataFactory {
     }
     
     // Méthode pour créer une commande avec un montant spécifié
-    public static Order createOrderWithAmount(Decimal totalAmount, Date effectiveDate, String status) {
+    public static Order createOrderWithAmount(Decimal totalAmount, Date) {
         Account testAccount = new Account( Name = 'Test Account');
         insert testAccount;
-        
+
+        Date effectiveDate = Date.today(); // Define la fecha efectiva como hoy
+        String status = 'Draft'; // Define el estado como 'Draft'
+
     
-    Order testOrder = new Order(AccountId = testAccount.Id, EffectiveDate = effectiveDate, Status = status);
-    insert testOrder;
-
-    OrderItem item = new OrderItem(
-        OrderId = testOrder.Id,
-        UnitPrice = totalAmount,
-        Quantity = 1
-    );
-    insert item;
-
-    return testOrder;
-}        
+        Order testOrder = new Order(
+            AccountId = testAccount.Id,
+            EffectiveDate = effectiveDate,
+            Status = status
+            );
+        insert testOrder;
     
-
+        OrderItem item = new OrderItem(
+            OrderId = testOrder.Id,
+            UnitPrice = totalAmount,
+            Quantity = 1
+        );
+        insert item;
+    
+        return testOrder;
+    }
+    
     // Méthode pour créer un volume massif de comptes de test
     public static List<Account> createMassiveAccounts(Integer numAccounts) {
         List<Account> accounts = new List<Account>();

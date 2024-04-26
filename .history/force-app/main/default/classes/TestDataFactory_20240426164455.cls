@@ -152,22 +152,23 @@ public with sharing class TestDataFactory {
     public static Order createOrderWithAmount(Decimal totalAmount, Date effectiveDate, String status) {
         Account testAccount = new Account( Name = 'Test Account');
         insert testAccount;
-        
     
-    Order testOrder = new Order(AccountId = testAccount.Id, EffectiveDate = effectiveDate, Status = status);
-    insert testOrder;
-
-    OrderItem item = new OrderItem(
-        OrderId = testOrder.Id,
-        UnitPrice = totalAmount,
-        Quantity = 1
-    );
-    insert item;
-
-    return testOrder;
-}        
+        Order testOrder = 
+            AccountId = testAccount.Id,
+            EffectiveDate = effectiveDate,
+            Status = status
+            );
+        insert testOrder;
     
-
+        OrderItem item = new OrderItem(
+            OrderId = testOrder.Id,
+            UnitPrice = totalAmount,
+            Quantity = 1
+        );
+        insert item;
+    
+        return testOrder;
+    }    
     // Méthode pour créer un volume massif de comptes de test
     public static List<Account> createMassiveAccounts(Integer numAccounts) {
         List<Account> accounts = new List<Account>();

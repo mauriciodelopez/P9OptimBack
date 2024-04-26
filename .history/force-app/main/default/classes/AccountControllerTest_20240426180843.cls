@@ -80,7 +80,6 @@ public with sharing class AccountControllerTest {
         }
         // Insert the new orders
         insert orders;
-        
         //Start the test context
         Test.startTest();
 

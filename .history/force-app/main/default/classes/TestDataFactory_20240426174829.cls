@@ -157,15 +157,7 @@ public with sharing class TestDataFactory {
     Order testOrder = new Order(AccountId = testAccount.Id, EffectiveDate = effectiveDate, Status = status);
     insert testOrder;
 
-    OrderItem item = new OrderItem(
-        OrderId = testOrder.Id,
-        UnitPrice = totalAmount,
-        Quantity = 1
-    );
-    insert item;
-
-    return testOrder;
-}        
+        
     
 
     // Méthode pour créer un volume massif de comptes de test
