@@ -1,0 +1,69 @@
+/**
+ * @description       : 
+ * @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+ * @group             : 
+ * @last modified on  : 04-26-2024
+ * @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+**/
+@isTest
+public with sharing class AccountControllerTest {
+
+    @testSetup
+    static void setup() {
+        // Créer des comptes de test
+        List<Account> accounts = TestDataFactory.createAccounts(200);
+        System.assertEquals(200, accounts.size(), 'TestDataFactory.createAccounts should create exactly 20 accounts');
+        //Insert les enregistrements de compte dans la base de données
+        insert accounts;
+    }
+    
+    @isTest
+    static void testCreateAccounts() {
+
+        // Récupérer les comptes créés dans la méthode de configuration du test Setup()
+        List<Account> accounts = [SELECT Id, Name FROM Account];
+
+        // Vérifier que le nombre de comptes créés correspond au nombre attendu
+        System.assertEquals(200, accounts.size(), 'Le nombre de comptes créés ne correspond pas au nombre attendu');
+
+        // Vérifier que le nom de chaque compte correspond au modèle attendu
+        for(Integer i = 0; i < accounts.size(); i++) {
+            String expectedName = 'Test Account ' + (i + 1);
+            System.assertEquals(expectedName, accounts[i].Name, 'Le nom du compte ne correspond pas au modèle attendu');
+        }
+    }
+
+    @isTest
+    static void testUpdateChiffreDAffaire() {
+        List<Account> accounts = [SELECT Id, Name FROM Account];
+
+        // Créer une instance de AccountController
+        AccountController controller = new AccountController();
+
+        // Verifica que las cuentas no sean null antes de llamar a updateChiffreDAffaire
+        if (accounts != null) {
+                    controller.updateChiffreDAffaire(accounts);
+                }
+
+
+        // Récupérer les comptes mis à jour
+        List<Account> accountsAfterUpdate = [SELECT Id, Chiffre_d_affaire__c FROM Account WHERE Id IN :accounts];
+        
+        // Vérifier que le champ Chiffre_d_affaire__c a été mis à jour correctement pour chaque compte
+        for(Account acc : accountsAfterUpdate) {
+            System.assertNotEquals(null, acc.Chiffre_d_affaire__c, 'Le champ Chiffre_d_affaire__c n\'a pas été mis à jour');
+        }
+    }
+
+    @isTest
+    static void testCreateOrdersAndCAUpdate() {
+        //Test pour créer des commandes et mettre à jour le CA
+
+        //Récuperer les comptes crées dans la méthode de configuration du test Setup()
+        List<Account> accounts = [SELECT Id, Name FROM Account];
+
+        //Créer des commandes pour chaque compte
+        List<Order> orders = TestDataFactory.createOrdersForAccounts(accounts, 1); // Créer 1 commande par compte
+        Systeme.assertEquals(200, orders.size(), 'Expected to create 200 order');
+    }
+}
