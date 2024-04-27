@@ -35,25 +35,28 @@ public with sharing class TestDataFactory {
     // Méthode pour créer une commande pour chaque compte avec un montant de 50€
     public static List<Order> createOrdersForAccounts(List<Account> accounts,   Decimal orderAmount) {
         List<Order> orders = new List<Order>();
-
         for (Account acc : accounts) {
-        Order ord = new Order();
+        Order order = new Order();
         order.AccountId = acc.Id;
-        orders.add(ord); // Agregar la Order a la lista de Orders
+        orders.add(order); // Agregar la Order a la lista de Orders
         }
         insert orders;// insert tout les ordres au meme temps pour avoir ses Ids
-        
 
         // Crée  un artícle d'ordre pour chaque order avec le montant spécifié
         List<OrderItem> orderItems = new List<OrderItem>();
         for (Order ord : orders) {
             OrderItem item = new OrderItem();
-            item.OrderId = ord.Id; // Asignar el Id de la Order creada
-            item.UnitPrice = orderAmount;
-            item.Quantity = 1;
-            orderItems.add(item);
+            orderItem.OrderId = ord.Id; // Asignar el Id de la Order creada
+            orderItem.UnitPrice = orderAmount;
+            orderItem.Quantity = 1;
+            orderItems.add(orderItem);
+            OrderId = ord.Id,
+            UnitPrice = orderAmount, // Le prix utnitaire est égale au montant de l'order
+            Quantity = 1 // Cantité des articles
+            
+        orderItems.add(item);
         }
-        insert orderItems;// insert tous les orderItems au même temps 
+        insert orderItems;
     
         return orders;
     }    

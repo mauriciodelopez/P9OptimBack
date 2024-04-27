@@ -31,37 +31,8 @@ public with sharing class TestDataFactory {
         }
         return accounts;
     }
-
-    // Méthode pour créer une commande pour chaque compte avec un montant de 50€
-    public static List<Order> createOrdersForAccounts(List<Account> accounts,   Decimal orderAmount) {
-        List<Order> orders = new List<Order>();
-
-        for (Account acc : accounts) {
-        Order ord = new Order();
-        order.AccountId = acc.Id;
-        orders.add(ord); // Agregar la Order a la lista de Orders
-        }
-        insert orders;// insert tout les ordres au meme temps pour avoir ses Ids
-        
-
-        // Crée  un artícle d'ordre pour chaque order avec le montant spécifié
-        List<OrderItem> orderItems = new List<OrderItem>();
-        for (Order ord : orders) {
-            OrderItem item = new OrderItem();
-            item.OrderId = ord.Id; // Asignar el Id de la Order creada
-            item.UnitPrice = orderAmount;
-            item.Quantity = 1;
-            orderItems.add(item);
-        }
-        insert orderItems;// insert tous les orderItems au même temps 
     
-        return orders;
-    }    
-
-
-
-    
-    /*// Méthode pour créer des commandes pour des comptes spécifiés
+    // Méthode pour créer des commandes pour des comptes spécifiés
     public static List<Order> createOrdersForAccounts(List<Account> accounts, Integer numOrdersPerAccount) {
         if (!Schema.sObjectType.Order.isCreateable()) {
             throw new SecurityException('Vous n\'avez pas la permission de créer des enregistrements de commande.');
@@ -77,7 +48,7 @@ public with sharing class TestDataFactory {
         }
         insert orders;
         return orders;
-    }*/
+    }
     
     // Méthode pour créer des commandes pour un nombre spécifié de fois
     // en les associant de manière aléatoire à des comptes spécifiés
@@ -178,15 +149,13 @@ public with sharing class TestDataFactory {
     }
     
     // Méthode pour créer une commande avec un montant spécifié
-    public static Order createOrderWithAmount(Decimal totalAmount, Date effectiveDate, String status, Id accountId) {
+    public static Order createOrderWithAmount(Decimal totalAmount, Date effectiveDate, String status) {
         //Create a new Order
         Order order = new Order();
 
         //Set the Order properties
-        //order.TotalAmount = totalAmount;
         order.EffectiveDate = effectiveDate;
         order.Status = status;
-        order.AccountId = accountId;        
 
         // Insert the new Order
         insert order;
@@ -194,11 +163,7 @@ public with sharing class TestDataFactory {
         // Create a new OrderItem with a UnitPrice equal to the desired totalAmount
         OrderItem item = new OrderItem();
         item.OrderId = order.Id;
-        item.UnitPrice = totalAmount;
-        item.Quantity = 1;
-
-        // Insert the new OrderItem
-        insert item;
+        item
 
         // Return the new Order
         return order;

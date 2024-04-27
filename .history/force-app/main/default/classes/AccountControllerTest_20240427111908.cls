@@ -64,10 +64,19 @@ public with sharing class AccountControllerTest {
         //Récuperer les comptes crées dans la méthode de configuration du test Setup()
         List<Account> accounts = TestDataFactory.createAccounts(200);
 
-        //Create orders pour chaque compte avec un montant de 50€
-        Decimal orderAmount = 50.0;
-        List<Order> orders = TestDataFactory.createOrdersForAccounts(accounts, orderAmount);
+        //Create orders pour chaque compte 
+        
+        // Définir la date effective et le statut pour la nouvelle commande
+        Date effectiveDate = Date.today();
+        String status = 'Draft';
 
+        //Créer une commande pour chaque compte avec un montant de 50€
+        for (Account acc : accounts) {
+            // Créer l'ordre et l'ajouter à la liste des ordres
+            Order order = TestDataFactory.createOrderWithAmount(50.0, Date.today(), 'Draft', acc.Id);
+            order.AccountId = acc.Id; // Définir l'ID du compte sur l'ordre
+        }
+        
         //Start the test context
         Test.startTest();
 
@@ -79,12 +88,7 @@ public with sharing class AccountControllerTest {
 
         // Vérifier que le CA Chiffre_d_affaires__c de chaque compte a été mis à jour correctement
         List<Account> updatedAccounts = [SELECT Id, Chiffre_d_affaire__c FROM Account WHERE Id IN :accounts];
-        
-        // Declare the total variable for the assertion
-        Decimal total = 0.0;
-        
         for(Account accUpdated : updatedAccounts) {
-            total+= accUpdated.Chiffre_d_affaire__c; 
             System.assertEquals(10000.0, accUpdated.Chiffre_d_affaire__c, 'Le champ Chiffre_d_affaires__c n\'a pas été mis à jour correctement');
         }
     }

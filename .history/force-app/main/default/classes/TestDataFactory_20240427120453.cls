@@ -42,8 +42,7 @@ public with sharing class TestDataFactory {
         orders.add(ord); // Agregar la Order a la lista de Orders
         }
         insert orders;// insert tout les ordres au meme temps pour avoir ses Ids
-        
-
+        return orders
         // Crée  un artícle d'ordre pour chaque order avec le montant spécifié
         List<OrderItem> orderItems = new List<OrderItem>();
         for (Order ord : orders) {

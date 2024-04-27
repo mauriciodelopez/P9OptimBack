@@ -84,6 +84,7 @@ public with sharing class AccountControllerTest {
         Decimal total = 0.0;
         
         for(Account accUpdated : updatedAccounts) {
+        for(Account accUpdated : updatedAccounts) {
             total+= accUpdated.Chiffre_d_affaire__c; 
             System.assertEquals(10000.0, accUpdated.Chiffre_d_affaire__c, 'Le champ Chiffre_d_affaires__c n\'a pas été mis à jour correctement');
         }

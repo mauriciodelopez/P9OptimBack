@@ -59,37 +59,44 @@ public with sharing class AccountControllerTest {
 
     @isTest
     static void testCreateOrdersAndCAUpdate() {
-        //Test pour créer des commandes avec une valeur et mettre à jour le CA
-
-        //Récuperer les comptes crées dans la méthode de configuration du test Setup()
+        // Test pour créer des commandes avec une valeur et mettre à jour le CA
+    
+        // Récupérer les comptes créés dans la méthode de configuration du test Setup()
         List<Account> accounts = TestDataFactory.createAccounts(200);
-
-        //Create orders pour chaque compte avec un montant de 50€
-        Decimal orderAmount = 50.0;
-        List<Order> orders = TestDataFactory.createOrdersForAccounts(accounts, orderAmount);
-
-        //Start the test context
+    
+        // Définir la date effective et le statut pour la nouvelle commande
+        Date effectiveDate = Date.today();
+        String status = 'Draft';
+    
+        // Déclarer la liste pour stocker les ordres créés
+        List<Order> orders = new List<Order>();
+    
+        // Créer une commande pour chaque compte avec un montant de 50€
+        for (Account acc : accounts) {
+            // Créer l'ordre et l'ajouter à la liste des ordres
+            Order order = TestDataFactory.createOrderWithAmount(50.0, Date.today(), status);
+            order.AccountId = acc.Id; // Définir l'ID du compte sur l'ordre
+            orders.add(order); // Ajouter l'ordre à la liste des ordres
+        }
+        // Insérer les nouveaux ordres
+        insert orders;
+        
+        // Démarrer le contexte de test
         Test.startTest();
-
-        // Mettre à jour les comptes pour activer le trigger sur update
+    
+        // Mettre à jour les comptes pour déclencher le déclencheur lors de la mise à jour
         update accounts;
-
-        // Stop the test context
+    
+        // Arrêter le contexte de test
         Test.stopTest();
-
+    
         // Vérifier que le CA Chiffre_d_affaires__c de chaque compte a été mis à jour correctement
         List<Account> updatedAccounts = [SELECT Id, Chiffre_d_affaire__c FROM Account WHERE Id IN :accounts];
-        
-        // Declare the total variable for the assertion
-        Decimal total = 0.0;
-        
         for(Account accUpdated : updatedAccounts) {
-            total+= accUpdated.Chiffre_d_affaire__c; 
             System.assertEquals(10000.0, accUpdated.Chiffre_d_affaire__c, 'Le champ Chiffre_d_affaires__c n\'a pas été mis à jour correctement');
         }
     }
-
-    /**
+    
     @isTest
     static void testAddOrderToCA() {
         //Test pour ajouter une commande au CA éxistant, car dans le test précedant 
@@ -125,5 +132,5 @@ public with sharing class AccountControllerTest {
             Decimal expectedCA = initialCA != null ? initialCA + 50.0 : 50.0;//Cette ligne calcule le chiffre d'affaires attendu après l'ajout de la nouvelle commande. Si le chiffre d'affaires initial (initialCA) n'est pas nul, alors le nouveau chiffre d'affaires sera égal à l'ancien chiffre d'affaires plus 50. Sinon, si le chiffre d'affaires initial est nul (ce qui signifie qu'il n'y avait pas de chiffre d'affaires précédent), le nouveau chiffre d'affaires sera simplement de 50.
             System.assertEquals(expectedCA, accUpdated.Chiffre_d_affaire__c, 'Le champ Chiffre_d_affaire__c n\'a pas été mis à jour correctement avec l\'ajout de la nouvelle commande (montant 50€).');    
         }
-    }**/
+    }
 }
