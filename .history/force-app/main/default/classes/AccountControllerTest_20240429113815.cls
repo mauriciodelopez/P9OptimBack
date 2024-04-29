@@ -65,10 +65,7 @@ public with sharing class AccountControllerTest {
         insert accounts;
 
         // Créer des ordres pour chaque compte avec un article pour une valeur de 50€
-        List<Order> orders = TestDataFactory.createOrdersForAccounts(accounts, 1, 50.0, 1);
-        for(Order order : orders) {
-            order.Status = 'Ordered';
-        }
+        List<Order> orders = TestDataFactory.createOrdersForAccounts(accounts, 50);
         insert orders;
 
         // Mettre à jour le CA de chaque compte
@@ -79,5 +76,6 @@ public with sharing class AccountControllerTest {
         for(Account acc : accountsAfterUpdate) {
             System.assertEquals(50.0, acc.Chiffre_d_affaire__c, 'Le CA n\'a pas été mis à jour correctement');
         }   
+
     }
 }

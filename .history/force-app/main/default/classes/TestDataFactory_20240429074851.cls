@@ -32,38 +32,53 @@ public with sharing class TestDataFactory {
         return accounts;
     }
 
-    public static List<Order> createOrdersForAccounts(List<Account> accounts, Integer numOrdersPerAccount, Decimal unitPricePerItem, Integer quantityPerItem) {
+    // Méthode pour créer une commande pour chaque compte avec un montant de 50€
+    public static List<Order> createOrdersForAccounts(List<Account> accounts,   Decimal orderAmount) {
         List<Order> orders = new List<Order>();
-    
-        // Iterar sobre cada cuenta para crear el número especificado de órdenes por cuenta
+
         for (Account acc : accounts) {
-            for (Integer i = 0; i < numOrdersPerAccount; i++) {
-                Order ord = new Order();
-                ord.AccountId = acc.Id;
-                ord.EffectiveDate = Date.today();
-                ord.Status = 'Draft'; // Puedes ajustar el estado según tus necesidades
-    
-                orders.add(ord); // Agregar la orden a la lista de órdenes
-            }
+        Order ord = new Order();
+        order.AccountId = acc.Id;
+        orders.add(ord); // Agregar la Order a la lista de Orders
         }
-    
-        // Insertar todas las órdenes para obtener sus Ids
-        insert orders;
-    
-        // Crear artículos de orden para cada orden creada
+        insert orders;// insert tout les ordres au meme temps pour avoir ses Ids
+        
+
+        // Crée  un artícle d'ordre pour chaque order avec le montant spécifié
         List<OrderItem> orderItems = new List<OrderItem>();
         for (Order ord : orders) {
             OrderItem item = new OrderItem();
-            item.OrderId = ord.Id;
-            item.UnitPrice = unitPricePerItem;
-            item.Quantity = quantityPerItem;
+            item.OrderId = ord.Id; // Asignar el Id de la Order creada
+            item.UnitPrice = orderAmount;
+            item.Quantity = 1;
             orderItems.add(item);
         }
-        insert orderItems;
+        insert orderItems;// insert tous les orderItems au même temps 
     
         return orders;
-    }
-            
+    }    
+
+
+
+    
+    /*// Méthode pour créer des commandes pour des comptes spécifiés
+    public static List<Order> createOrdersForAccounts(List<Account> accounts, Integer numOrdersPerAccount) {
+        if (!Schema.sObjectType.Order.isCreateable()) {
+            throw new SecurityException('Vous n\'avez pas la permission de créer des enregistrements de commande.');
+        }
+    
+        List<Order> orders = new List<Order>();
+        // Boucler à travers les comptes spécifiés
+        for(Account acc : accounts) {
+            // Créer le nombre spécifié de commandes pour chaque compte
+            for(Integer i = 0; i < numOrdersPerAccount; i++) {
+                orders.add(new Order(AccountId = acc.Id, EffectiveDate = System.today(), Status = 'Draft'));
+            }
+        }
+        insert orders;
+        return orders;
+    }*/
+    
     // Méthode pour créer des commandes pour un nombre spécifié de fois
     // en les associant de manière aléatoire à des comptes spécifiés
     public static List<Order> createOrders(List<Account> accounts, Integer numOrders) {
@@ -135,7 +150,7 @@ public with sharing class TestDataFactory {
     
         // Créer le nombre spécifié de comptes
         for (Integer i = 0; i < numAccounts; i++) {
-            accounts.add(new Account(Name = 'Test Account' + i));
+            accounts.add(new Account(Name = 'Compte de test ' + i));
         }
         insert accounts;
     
@@ -162,6 +177,32 @@ public with sharing class TestDataFactory {
         return accounts;
     }
     
+    // Méthode pour créer une commande avec un montant spécifié
+    public static Order createOrderWithAmount(Decimal totalAmount, Date effectiveDate, String status, Id accountId) {
+        //Create a new Order
+        Order order = new Order();
+
+        //Set the Order properties
+        //order.TotalAmount = totalAmount;
+        order.EffectiveDate = effectiveDate;
+        order.Status = status;
+        order.AccountId = accountId;        
+
+        // Insert the new Order
+        insert order;
+
+        // Create a new OrderItem with a UnitPrice equal to the desired totalAmount
+        OrderItem item = new OrderItem();
+        item.OrderId = order.Id;
+        item.UnitPrice = totalAmount;
+        item.Quantity = 1;
+
+        // Insert the new OrderItem
+        insert item;
+
+        // Return the new Order
+        return order;
+    }        
     
 
     // Méthode pour créer un volume massif de comptes de test
@@ -169,7 +210,7 @@ public with sharing class TestDataFactory {
         List<Account> accounts = new List<Account>();
         // Créer le nombre spécifié de comptes
         for (Integer i = 0; i < numAccounts; i++) {
-            Account a = new Account(Name = 'Test Account' + i);
+            Account a = new Account(Name = 'Compte de test ' + i);
             accounts.add(a);
         }
         insert accounts;
@@ -201,6 +242,20 @@ public with sharing class TestDataFactory {
             }
         }
         insert orderItems;
-        //Cette methode n'a pas besoin de faire return car elle insere directement la liste d'items de commande dans la base de donnees
     }
-} 
+
+    public static List<Opportunity> createOpp (Integer numOPP){
+        List<Opportunity> opp = new List<Opportunity>();
+        for(Integer i = 0; i< numOPP; i++){
+            Opportunity p = new Opportunity();
+            p.Name = 'Pepe' + (i+1);
+        }
+    }
+
+
+        }
+    } 
+}
+
+
+

@@ -32,38 +32,7 @@ public with sharing class TestDataFactory {
         return accounts;
     }
 
-    public static List<Order> createOrdersForAccounts(List<Account> accounts, Integer numOrdersPerAccount, Decimal unitPricePerItem, Integer quantityPerItem) {
-        List<Order> orders = new List<Order>();
-    
-        // Iterar sobre cada cuenta para crear el número especificado de órdenes por cuenta
-        for (Account acc : accounts) {
-            for (Integer i = 0; i < numOrdersPerAccount; i++) {
-                Order ord = new Order();
-                ord.AccountId = acc.Id;
-                ord.EffectiveDate = Date.today();
-                ord.Status = 'Draft'; // Puedes ajustar el estado según tus necesidades
-    
-                orders.add(ord); // Agregar la orden a la lista de órdenes
-            }
-        }
-    
-        // Insertar todas las órdenes para obtener sus Ids
-        insert orders;
-    
-        // Crear artículos de orden para cada orden creada
-        List<OrderItem> orderItems = new List<OrderItem>();
-        for (Order ord : orders) {
-            OrderItem item = new OrderItem();
-            item.OrderId = ord.Id;
-            item.UnitPrice = unitPricePerItem;
-            item.Quantity = quantityPerItem;
-            orderItems.add(item);
-        }
-        insert orderItems;
-    
-        return orders;
-    }
-            
+        
     // Méthode pour créer des commandes pour un nombre spécifié de fois
     // en les associant de manière aléatoire à des comptes spécifiés
     public static List<Order> createOrders(List<Account> accounts, Integer numOrders) {

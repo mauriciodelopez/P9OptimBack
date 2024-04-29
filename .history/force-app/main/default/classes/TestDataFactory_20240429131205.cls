@@ -32,38 +32,27 @@ public with sharing class TestDataFactory {
         return accounts;
     }
 
-    public static List<Order> createOrdersForAccounts(List<Account> accounts, Integer numOrdersPerAccount, Decimal unitPricePerItem, Integer quantityPerItem) {
+    public static List<Order> createOrdersForAccounts(List<Account> accounts, Integer numOrdersPerAccount, Decimal totalAmountPerOrder) {
         List<Order> orders = new List<Order>();
+        Integer totalOrders = accounts.size() * numOrdersPerAccount;
     
-        // Iterar sobre cada cuenta para crear el número especificado de órdenes por cuenta
-        for (Account acc : accounts) {
-            for (Integer i = 0; i < numOrdersPerAccount; i++) {
-                Order ord = new Order();
-                ord.AccountId = acc.Id;
-                ord.EffectiveDate = Date.today();
-                ord.Status = 'Draft'; // Puedes ajustar el estado según tus necesidades
+        for (Integer i = 0; i < totalOrders; i++) {
+            Integer accountIndex = i / accounts.size(); // Índice de la cuenta actual en la lista de cuentas
+            Account acc = accounts[accountIndex];
     
-                orders.add(ord); // Agregar la orden a la lista de órdenes
-            }
+            Order ord = new Order();
+            ord.AccountId = acc.Id;
+            ord.EffectiveDate = Date.today();
+            ord.Status = 'Draft'; // Puedes ajustar el estado según tus necesidades
+            ord.TotalAmount = totalAmountPerOrder; // Establece el monto total para cada orden
+            orders.add(ord); // Agregar la Order a la lista de Orders
         }
     
-        // Insertar todas las órdenes para obtener sus Ids
-        insert orders;
-    
-        // Crear artículos de orden para cada orden creada
-        List<OrderItem> orderItems = new List<OrderItem>();
-        for (Order ord : orders) {
-            OrderItem item = new OrderItem();
-            item.OrderId = ord.Id;
-            item.UnitPrice = unitPricePerItem;
-            item.Quantity = quantityPerItem;
-            orderItems.add(item);
-        }
-        insert orderItems;
+        insert orders; // Inserta todas las órdenes para obtener sus Ids
     
         return orders;
     }
-            
+        
     // Méthode pour créer des commandes pour un nombre spécifié de fois
     // en les associant de manière aléatoire à des comptes spécifiés
     public static List<Order> createOrders(List<Account> accounts, Integer numOrders) {
@@ -201,6 +190,6 @@ public with sharing class TestDataFactory {
             }
         }
         insert orderItems;
-        //Cette methode n'a pas besoin de faire return car elle insere directement la liste d'items de commande dans la base de donnees
+        //Cette methode 
     }
 } 

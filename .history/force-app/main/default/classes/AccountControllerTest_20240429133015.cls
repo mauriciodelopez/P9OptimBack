@@ -70,6 +70,7 @@ public with sharing class AccountControllerTest {
             order.Status = 'Ordered';
         }
         insert orders;
+        insert orders;
 
         // Mettre à jour le CA de chaque compte
         TestDataFactory.updateChiffreDAffaire(accounts);
