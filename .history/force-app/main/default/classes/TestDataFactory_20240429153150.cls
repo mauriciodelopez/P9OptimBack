@@ -31,58 +31,8 @@ public with sharing class TestDataFactory {
         }
         return accounts;
     }
-    public static List<Order> createOrdersForAccounts(List<Account> accounts, Integer numOrdersPerAccount, Decimal unitPricePerItem, Integer quantityPerItem) {
-        // Crear un Product2
-        Product2 prod = new Product2(Name = 'Test Product', IsActive = true);
-        insert prod;
-    
-        // Obtener el Pricebook2 estándar
-        Pricebook2 stdPb = [SELECT Id FROM Pricebook2 WHERE IsStandard = true LIMIT 1];
-    
-        // Crear un PricebookEntry estándar para el producto
-        PricebookEntry stdPbe = new PricebookEntry(Pricebook2Id = stdPb.Id, Product2Id = prod.Id, UnitPrice = unitPricePerItem, IsActive = true);
-        insert stdPbe;
-    
-        // Crear un Pricebook2 personalizado
-        Pricebook2 pb = new Pricebook2(Name = 'Test Pricebook', IsActive = true);
-        insert pb;
-    
-        // Crear un PricebookEntry personalizado para el producto en el Pricebook2 personalizado
-        PricebookEntry pbe = new PricebookEntry(Pricebook2Id = pb.Id, Product2Id = prod.Id, UnitPrice = unitPricePerItem, IsActive = true);
-        insert pbe;
-    
-        List<Order> orders = new List<Order>();
-    
-        // Iterar sobre cada cuenta para crear el número especificado de órdenes por cuenta
-        for (Account acc : accounts) {
-            for (Integer i = 0; i < numOrdersPerAccount; i++) {
-                Order ord = new Order();
-                ord.AccountId = acc.Id;
-                ord.EffectiveDate = Date.today();
-                ord.Status = 'Draft'; // Puedes ajustar el estado según tus necesidades
-    
-                orders.add(ord); // Agregar la orden a la lista de órdenes
-            }
-        }
-    
-        // Insertar todas las órdenes para obtener sus Ids
-        insert orders;
-    
-        // Crear artículos de orden para cada orden creada
-        List<OrderItem> orderItems = new List<OrderItem>();
-        for (Order ord : orders) {
-            OrderItem item = new OrderItem();
-            item.OrderId = ord.Id;
-            item.PricebookEntryId = pbe.Id; // Usar el PricebookEntryId que creamos anteriormente
-            item.UnitPrice = unitPricePerItem;
-            item.Quantity = quantityPerItem;
-            orderItems.add(item);
-        }
-        insert orderItems;
-    
-        return orders;
-    }
 
+            
     // Méthode pour créer des commandes pour un nombre spécifié de fois
     // en les associant de manière aléatoire à des comptes spécifiés
     public static List<Order> createOrders(List<Account> accounts, Integer numOrders) {
@@ -222,4 +172,4 @@ public with sharing class TestDataFactory {
         insert orderItems;
         //Cette methode n'a pas besoin de faire return car elle insere directement la liste d'items de commande dans la base de donnees
     }
-}
+} 

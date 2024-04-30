@@ -222,4 +222,4 @@ public with sharing class TestDataFactory {
         insert orderItems;
         //Cette methode n'a pas besoin de faire return car elle insere directement la liste d'items de commande dans la base de donnees
     }
-}
+} 
