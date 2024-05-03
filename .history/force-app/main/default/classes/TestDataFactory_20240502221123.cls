@@ -110,26 +110,34 @@ public with sharing class TestDataFactory {
     // en les associant de manière aléatoire à des comptes spécifiés
     public static List<Order> createOrders(List<Account> accounts, Integer numOrders) {
         
-        List<Order> orders = new List<Order>();
-
-        // creation d'un pricebook dans la class de test
-        Pricebook2 pricebookClass = new Pricebook2(Name = 'Platinium');
-        insert pricebookClass;
-        
-        // Vérifier si la création d'enregistrements Order est autorisée
-        if (!Schema.sObjectType.Order.isCreateable()) {
-            throw new SecurityException('Vous n\'avez pas la permission de créer des enregistrements de commande.');
-        }
+    // insert account
+    Account acc = new Account(
+        Name = 'SFDCPanther.com',
+        Rating = 'Hot',
+        Industry = 'Banking',
+        Phone = '9087654321'
+    );
+    insert acc;
     
-       
-        Integer numAccounts = accounts.size();
-        // Boucler pour créer le nombre spécifié de commandes
-        for(Integer i = 0; i < numOrders; i++) {
-            // Choisir un index aléatoire pour sélectionner un compte
-            Integer randomIndex = Math.mod(i, numAccounts);
-            orders.add(new Order(AccountId = accounts[randomIndex].Id, 
-            PriceBook2Id = Test.getStandardPricebookId(), EffectiveDate = System.today(), Status = 'Brouillon'));
-        }
+    Order order = new Order(
+        AccountId = acc.Id,
+        EffectiveDate = System.today(),
+        Status = 'Draft',
+        PriceBook2Id = Test.getStandardPricebookId()
+    );
+    insert order;
+    
+    OrderItem lineItem = new OrderItem();
+    lineItem.OrderId = order.id;
+    lineItem.Quantity = 24;
+    lineItem.UnitPrice = 240;
+    lineItem.Product2id = p.id;
+    lineItem.PricebookEntryId=standardPrice.id;
+    insert lineItem;
+    
+    // Now update & Activate the Order
+    order.Status = 'Activated';
+    update order;
         insert orders;
 
         //créer les order items
@@ -232,8 +240,8 @@ public with sharing class TestDataFactory {
                 PricebookEntry standardPrice = new PricebookEntry();
                 standardPrice.Pricebook2Id = Test.getStandardPricebookId();
                 standardPrice.Product2Id = newProduct.Id;
-                standardPrice.UnitPrice = unitPrice;
-                standardPrice.IsActive = True;
+                standardPrice.UnitPrice = 100;
+                standardPrice.IsActive = unitPrice;
                 
                 insert standardPrice ;
                 

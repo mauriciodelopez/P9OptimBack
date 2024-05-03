@@ -80,8 +80,6 @@ public with sharing class TestDataFactory {
         }
         return accounts;
     }
-
-
     public static List<Order> createOrdersForAccounts(List<Account> accounts, Integer numOrdersPerAccount, Decimal pricePerOrder) {
         List<Order> orders = new List<Order>();
     
@@ -104,16 +102,12 @@ public with sharing class TestDataFactory {
         return orders;
     }
 
-
-
     // Méthode pour créer des commandes pour un nombre spécifié de fois
     // en les associant de manière aléatoire à des comptes spécifiés
     public static List<Order> createOrders(List<Account> accounts, Integer numOrders) {
         
-        List<Order> orders = new List<Order>();
-
         // creation d'un pricebook dans la class de test
-        Pricebook2 pricebookClass = new Pricebook2(Name = 'Platinium');
+        //Pricebook2 pricebookClass = new Pricebook2(Name = 'Platinium');
         insert pricebookClass;
         
         // Vérifier si la création d'enregistrements Order est autorisée
@@ -121,14 +115,13 @@ public with sharing class TestDataFactory {
             throw new SecurityException('Vous n\'avez pas la permission de créer des enregistrements de commande.');
         }
     
-       
+        List<Order> orders = new List<Order>();
         Integer numAccounts = accounts.size();
         // Boucler pour créer le nombre spécifié de commandes
         for(Integer i = 0; i < numOrders; i++) {
             // Choisir un index aléatoire pour sélectionner un compte
             Integer randomIndex = Math.mod(i, numAccounts);
-            orders.add(new Order(AccountId = accounts[randomIndex].Id, 
-            PriceBook2Id = Test.getStandardPricebookId(), EffectiveDate = System.today(), Status = 'Brouillon'));
+            orders.add(new Order(AccountId = accounts[randomIndex].Id, Pricebook2 = pricebookClass.Id, EffectiveDate = System.today(), Status = 'Brouillon'));
         }
         insert orders;
 
@@ -137,9 +130,11 @@ public with sharing class TestDataFactory {
         return orders;
     }
 
+         
     
-    // Méthode pour créer des articles de commande pour des commandes spécifiées
-    public static List<OrderItem> createOrderItems(List<Order> orders, Decimal unitPricePerItem, Integer quantityPerItem, Integer numItemsPerOrder, Pricebook2 pricebook) {
+    
+        // Méthode pour créer des articles de commande pour des commandes spécifiées
+        public static List<OrderItem> createOrderItems(List<Order> orders, Decimal unitPricePerItem, Integer quantityPerItem, Integer numItemsPerOrder, Pricebook2 pricebook) {
 
         // Vérifier si la création d'enregistrements OrderItem est autorisée
         if (!Schema.sObjectType.OrderItem.isCreateable()) {
@@ -162,7 +157,6 @@ public with sharing class TestDataFactory {
         insert orderItems;
         return orderItems;
     }
-
         
     // Méthode pour créer un volume massif de données de test
     public static List<Account> createMassiveData(Integer numAccounts, Integer ordersPerAccount) {
@@ -227,17 +221,13 @@ public with sharing class TestDataFactory {
         }
 
                 // Créer le prix du produit et l'associer au produit
-
-        
-                PricebookEntry standardPrice = new PricebookEntry();
-                standardPrice.Pricebook2Id = Test.getStandardPricebookId();
-                standardPrice.Product2Id = newProduct.Id;
-                standardPrice.UnitPrice = unitPrice;
-                standardPrice.IsActive = True;
-                
-                insert standardPrice ;
-                
-
+                PricebookEntry newPricebookEntry = new PricebookEntry(
+                    Pricebook2Id = pricebookClass.Id,
+                    Product2Id = newProduct.Id,
+                    UnitPrice = unitPrice,
+                    IsActive = true
+                );
+                insert newPricebookEntry;
             
         
         
@@ -278,29 +268,30 @@ public with sharing class TestDataFactory {
     }
 
     public static void createTeamOrdersTestData() {
-        // Create an account
-        Account a = new Account(Name = 'Test Account');
-        insert a;
+            // Create an account
+            Account a = new Account(Name = 'Test Account');
+            insert a;
 
-        // Create a user with the 'Commercial' role
-    UserRole r;
-    System.runAs(new User(Id = UserInfo.getUserId())) {
-        r = new UserRole(DeveloperName = 'Commercial', Name = 'Commercial');
-        insert r;
-    }
+            // Create a user with the 'Commercial' role
+        UserRole r;
+        System.runAs(new User(Id = UserInfo.getUserId())) {
+            r = new UserRole(DeveloperName = 'Commercial', Name = 'Commercial');
+            insert r;
+        }
 
-    String uniqueUserName = 'standarduser' + DateTime.now().getTime() + '@testorg.com';
-    User u = new User(Alias = 'standt', Email='standarduser@testorg.com',
-                    EmailEncodingKey='UTF-8', LastName='Testing', LanguageLocaleKey='en_US',
-                    LocaleSidKey='en_US', ProfileId = UserInfo.getProfileId(), 
-                    TimeZoneSidKey='America/Los_Angeles', UserName=uniqueUserName,
-                    UserRole = r);
-    insert u;
+        String uniqueUserName = 'standarduser' + DateTime.now().getTime() + '@testorg.com';
+        User u = new User(Alias = 'standt', Email='standarduser@testorg.com',
+                        EmailEncodingKey='UTF-8', LastName='Testing', LanguageLocaleKey='en_US',
+                        LocaleSidKey='en_US', ProfileId = UserInfo.getProfileId(), 
+                        TimeZoneSidKey='America/Los_Angeles', UserName=uniqueUserName,
+                        UserRole = r);
+        insert u;
 
-        // Run as the new user to create an order
-    System.runAs(u) {
-        Order o = new Order(OwnerId = u.Id, AccountId = a.Id, EffectiveDate = System.today(), Status = 'Draft');
-        insert o;
+            // Run as the new user to create an order
+        System.runAs(u) {
+            Order o = new Order(OwnerId = u.Id, AccountId = a.Id, EffectiveDate = System.today(), Status = 'Draft');
+            insert o;
+            }
         }
     }
 }

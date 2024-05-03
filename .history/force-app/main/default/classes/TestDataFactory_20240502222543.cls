@@ -232,8 +232,8 @@ public with sharing class TestDataFactory {
                 PricebookEntry standardPrice = new PricebookEntry();
                 standardPrice.Pricebook2Id = Test.getStandardPricebookId();
                 standardPrice.Product2Id = newProduct.Id;
-                standardPrice.UnitPrice = unitPrice;
-                standardPrice.IsActive = True;
+                standardPrice.UnitPrice = 100;
+                standardPrice.IsActive = unitrice;
                 
                 insert standardPrice ;
                 

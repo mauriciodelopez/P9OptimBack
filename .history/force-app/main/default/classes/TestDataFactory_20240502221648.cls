@@ -63,7 +63,7 @@ public with sharing class TestDataFactory {
 
     }
         
-
+/*
     // Méthode pour créer une liste d'objets Account avec un nombre spécifié
     public static List<Account> createAccounts(Integer numAccounts) {
         List<Account> accounts = new List<Account>();
@@ -110,8 +110,6 @@ public with sharing class TestDataFactory {
     // en les associant de manière aléatoire à des comptes spécifiés
     public static List<Order> createOrders(List<Account> accounts, Integer numOrders) {
         
-        List<Order> orders = new List<Order>();
-
         // creation d'un pricebook dans la class de test
         Pricebook2 pricebookClass = new Pricebook2(Name = 'Platinium');
         insert pricebookClass;
@@ -121,14 +119,13 @@ public with sharing class TestDataFactory {
             throw new SecurityException('Vous n\'avez pas la permission de créer des enregistrements de commande.');
         }
     
-       
+        List<Order> orders = new List<Order>();
         Integer numAccounts = accounts.size();
         // Boucler pour créer le nombre spécifié de commandes
         for(Integer i = 0; i < numOrders; i++) {
             // Choisir un index aléatoire pour sélectionner un compte
             Integer randomIndex = Math.mod(i, numAccounts);
-            orders.add(new Order(AccountId = accounts[randomIndex].Id, 
-            PriceBook2Id = Test.getStandardPricebookId(), EffectiveDate = System.today(), Status = 'Brouillon'));
+            orders.add(new Order(AccountId = accounts[randomIndex].Id, Pricebook2 = pricebookClass.Id, EffectiveDate = System.today(), Status = 'Brouillon'));
         }
         insert orders;
 
@@ -232,8 +229,8 @@ public with sharing class TestDataFactory {
                 PricebookEntry standardPrice = new PricebookEntry();
                 standardPrice.Pricebook2Id = Test.getStandardPricebookId();
                 standardPrice.Product2Id = newProduct.Id;
-                standardPrice.UnitPrice = unitPrice;
-                standardPrice.IsActive = True;
+                standardPrice.UnitPrice = 100;
+                standardPrice.IsActive = unitPrice;
                 
                 insert standardPrice ;
                 

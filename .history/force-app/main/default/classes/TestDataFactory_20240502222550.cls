@@ -232,7 +232,7 @@ public with sharing class TestDataFactory {
                 PricebookEntry standardPrice = new PricebookEntry();
                 standardPrice.Pricebook2Id = Test.getStandardPricebookId();
                 standardPrice.Product2Id = newProduct.Id;
-                standardPrice.UnitPrice = unitPrice;
+                standardPrice.UnitPrice = 100;
                 standardPrice.IsActive = True;
                 
                 insert standardPrice ;

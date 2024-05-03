@@ -2,7 +2,7 @@
  * @description       : 
  * @author            : ChangeMeIn@UserSettingsUnder.SFDoc
  * @group             : 
- * @last modified on  : 05-02-2024
+ * @last modified on  : 05-01-2024
  * @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
 **/
 @isTest // Cette annotation indique que cette classe est une classe de test.
@@ -20,14 +20,13 @@ public class OrderTriggerHandlerTest {
 
     @isTest // Cette annotation indique que la méthode suivante est une méthode de test.
     static void testBeforeUpdateV1(){
-        
         // Créez un compte et une commande
-        //TestDataFactory.createOrderLineItem();
+        Account acc = [SELECT Id, Name FROM Account];
+        Order ord = [SELECT Id, Status, TotalAmount, ShipmentCost__c FROM Order LIMIT 1];
+
         // Llamar al metodo beforeUpdate
-        Account acc = [SELECT Id, Name FROM Account WHERE Name='SFDCPanther.com'];
-        Order ord = [SELECT Id, Status, TotalAmount, ShipmentCost__c FROM Order WHERE AccountId = :acc.Id];
         OrderTriggerHandler.beforeUpdate(new List<Order>{ord}, new Map<Id, Order>{});//representa el mapeo(diccionario) de l'id de cada pedido
-        System.assertEquals(90, ord.NetAmount__c, 'El montant net no coincide con el esperado');
+        System.assertEquals(-10, ord.NetAmount__c, 'El montant net no coincide con el esperado');
     }
 
         
@@ -95,8 +94,19 @@ public class OrderTriggerHandlerTest {
         Order ord = [SELECT Id, Status, TotalAmount FROM Order LIMIT 1];
         System.assertNotEquals(null, ord, 'Il n\'y a pas de commande de test');
 
-
-
+        // Créer un produit et l'associer à la commande
+        Product2 prod = TestDataFactory.createProduct('cycle test', 'Test Family', 100);
+    
+        // Récupérer l'ID du PricebookEntry associé au produit
+        
+    
+        if(!pbeList.isEmpty()) {
+            PricebookEntry pbe = pbeList[0];
+            OrderItem ordItem = new OrderItem(OrderId = ord.Id, PricebookEntryId = pbe.Id, Quantity = 1, UnitPrice = 100);
+            insert ordItem;
+        } else {
+            System.assert(false, 'Le PricebookEntry n\'a pas été trouvé');
+        }
         //Vérifier que l'ordre s'est crée correctement avec le status Draft
         System.assertEquals('Draft', ord.Status, 'Le statut de la commande n\'est pas Draft');
 

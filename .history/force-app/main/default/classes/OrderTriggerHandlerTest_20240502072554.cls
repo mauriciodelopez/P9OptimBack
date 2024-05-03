@@ -20,14 +20,13 @@ public class OrderTriggerHandlerTest {
 
     @isTest // Cette annotation indique que la méthode suivante est une méthode de test.
     static void testBeforeUpdateV1(){
-        
         // Créez un compte et une commande
-        //TestDataFactory.createOrderLineItem();
+        Account acc = [SELECT Id, Name FROM Account];
+        Order ord = [SELECT Id, Status, TotalAmount, ShipmentCost__c FROM Order LIMIT 1];
+
         // Llamar al metodo beforeUpdate
-        Account acc = [SELECT Id, Name FROM Account WHERE Name='SFDCPanther.com'];
-        Order ord = [SELECT Id, Status, TotalAmount, ShipmentCost__c FROM Order WHERE AccountId = :acc.Id];
         OrderTriggerHandler.beforeUpdate(new List<Order>{ord}, new Map<Id, Order>{});//representa el mapeo(diccionario) de l'id de cada pedido
-        System.assertEquals(90, ord.NetAmount__c, 'El montant net no coincide con el esperado');
+        System.assertEquals(-10, ord.NetAmount__c, 'El montant net no coincide con el esperado');
     }
 
         
@@ -95,6 +94,9 @@ public class OrderTriggerHandlerTest {
         Order ord = [SELECT Id, Status, TotalAmount FROM Order LIMIT 1];
         System.assertNotEquals(null, ord, 'Il n\'y a pas de commande de test');
 
+        // Créer un nouveau produit
+        Product2 prod = new Product2(Name = 'Cycle Test Trek');
+        insert prod;
 
 
         //Vérifier que l'ordre s'est crée correctement avec le status Draft

@@ -22,7 +22,7 @@ public class OrderTriggerHandlerTest {
     static void testBeforeUpdateV1(){
         
         // Créez un compte et une commande
-        //TestDataFactory.createOrderLineItem();
+        TestDataFactory.createOrderLineItem();
         // Llamar al metodo beforeUpdate
         Account acc = [SELECT Id, Name FROM Account WHERE Name='SFDCPanther.com'];
         Order ord = [SELECT Id, Status, TotalAmount, ShipmentCost__c FROM Order WHERE AccountId = :acc.Id];

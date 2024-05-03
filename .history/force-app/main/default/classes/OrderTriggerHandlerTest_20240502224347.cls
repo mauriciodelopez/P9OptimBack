@@ -20,12 +20,11 @@ public class OrderTriggerHandlerTest {
 
     @isTest // Cette annotation indique que la méthode suivante est une méthode de test.
     static void testBeforeUpdateV1(){
-        
         // Créez un compte et une commande
+        Account acc = [SELECT Id, Name FROM Account];
+        Order ord = [SELECT Id, Status, TotalAmount, ShipmentCost__c FROM Order LIMIT 1];
         //TestDataFactory.createOrderLineItem();
         // Llamar al metodo beforeUpdate
-        Account acc = [SELECT Id, Name FROM Account WHERE Name='SFDCPanther.com'];
-        Order ord = [SELECT Id, Status, TotalAmount, ShipmentCost__c FROM Order WHERE AccountId = :acc.Id];
         OrderTriggerHandler.beforeUpdate(new List<Order>{ord}, new Map<Id, Order>{});//representa el mapeo(diccionario) de l'id de cada pedido
         System.assertEquals(90, ord.NetAmount__c, 'El montant net no coincide con el esperado');
     }
