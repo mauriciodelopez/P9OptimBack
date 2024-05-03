@@ -65,56 +65,120 @@ public with sharing class TestDataFactory {
         return order;
     }
             
-    // DONE MLO
-    public static List<Account> createAccountsWithOrders(Integer numAccounts, Integer ordersPerAccount, String productName, String productCode) {
+
+    // Méthode pour créer une liste d'objets Account avec un nombre spécifié
+    public static List<Account> createAccounts(Integer numAccounts) {
         List<Account> accounts = new List<Account>();
-    
-        // Create the specified number of accounts with orders
-        for (Integer i = 0; i < numAccounts; i++) {
-        Account acc = new Account();
-        acc.Name = 'Test Account ' + (i + 1);
-        accounts.add(acc);
-    
-        // Create orders for this account using createOrderWithProduct
-        for (Integer j = 0; j < ordersPerAccount; j++) {
-            createOrderWithProduct(productName, productCode, 1, acc.Id); // 1 item per order
+        // Vérifier si la création d'enregistrements Account est autorisée
+        if (!Schema.sObjectType.Account.isCreateable()) {
+            throw new SecurityException('Vous n\'avez pas la permission de créer des enregistrements de compte.');
         }
-    }
-    
-        // Insert accounts (if not already inserted in createOrderWithProduct)
-        if (!accounts.isEmpty() && !accounts[0].Id != null) {
-        insert accounts;
+        // Boucler pour créer le nombre spécifié de comptes
+        for(Integer i = 0; i < numAccounts; i++) {
+            Account a = new Account();
+            a.Name = 'Test Account ' + (i + 1);
+            // Configurer d'autres champs si nécessaire
+            accounts.add(a);
         }
-    
         return accounts;
     }
-    //DONE MLO
-    public static List<Order> createOrdersForAccounts(List<Account> accounts, Integer numOrdersPerAccount, String productName, String productCode, Decimal pricePerItem) {
+
+
+    public static List<Order> createOrdersForAccounts(List<Account> accounts, Integer numOrdersPerAccount, Decimal pricePerOrder) {
         List<Order> orders = new List<Order>();
     
-        // Loop to create orders with a single item per order using createOrderWithProduct
+        // Iterar sobre cada cuenta para crear el número especificado de órdenes por cuenta
         for (Account acc : accounts) {
-        for (Integer i = 0; i < numOrdersPerAccount; i++) {
-            orders.add(createOrderWithProduct(productName, productCode, 1, acc.Id, pricePerItem)); // 1 item per order
+            for (Integer i = 0; i < numOrdersPerAccount; i++) {
+                Order ord = new Order();
+                ord.AccountId = acc.Id;
+                ord.EffectiveDate = Date.today();
+                ord.Status = 'Draft'; // Puedes ajustar el estado según tus necesidades
+                ord.NetAmount__c = pricePerOrder; // Establecer el precio de la orden
+    
+                orders.add(ord); // Agregar la orden a la lista de órdenes
+            }
         }
-        }
+    
+        // Insertar todas las órdenes para obtener sus Ids
+        insert orders;
     
         return orders;
     }
+
+
+
+    // Méthode pour créer des commandes pour un nombre spécifié de fois
+    // en les associant de manière aléatoire à des comptes spécifiés
+    public static List<Order> createOrders(List<Account> accounts, Integer numOrders) {
         
-    // Méthode pour créer un volume massif de données de test DONE MLO
+        List<Order> orders = new List<Order>();
+
+        // creation d'un pricebook dans la class de test
+        Pricebook2 pricebookClass = new Pricebook2(Name = 'Platinium');
+        insert pricebookClass;
+        
+        // Vérifier si la création d'enregistrements Order est autorisée
+        if (!Schema.sObjectType.Order.isCreateable()) {
+            throw new SecurityException('Vous n\'avez pas la permission de créer des enregistrements de commande.');
+        }
+    
+    
+        Integer numAccounts = accounts.size();
+        // Boucler pour créer le nombre spécifié de commandes
+        for(Integer i = 0; i < numOrders; i++) {
+            // Choisir un index aléatoire pour sélectionner un compte
+            Integer randomIndex = Math.mod(i, numAccounts);
+            orders.add(new Order(AccountId = accounts[randomIndex].Id, 
+            PriceBook2Id = Test.getStandardPricebookId(), EffectiveDate = System.today(), Status = 'Brouillon'));
+        }
+        insert orders;
+
+        //créer les order items
+        createOrderItems(orders, 50.00, 1, 2, pricebookClass);
+        return orders;
+    }
+
+    
+    // Méthode pour créer des articles de commande pour des commandes spécifiées
+    public static List<OrderItem> createOrderItems(List<Order> orders, Decimal unitPricePerItem, Integer quantityPerItem, Integer numItemsPerOrder, Pricebook2 pricebook) {
+
+        // Vérifier si la création d'enregistrements OrderItem est autorisée
+        if (!Schema.sObjectType.OrderItem.isCreateable()) {
+            throw new SecurityException('Vous n\'avez pas la permission de créer des enregistrements d\'article de commande.');
+        }
+    
+        // Vérifier les paramètres d'entrée
+        if (orders == null || orders.isEmpty() || unitPricePerItem == null || quantityPerItem == null || numItemsPerOrder == null) {
+            throw new IllegalArgumentException('Paramètres d\'entrée non valides.');
+        }
+    
+        List<OrderItem> orderItems = new List<OrderItem>();
+        // Boucler à travers les commandes spécifiées
+        for(Order ord : orders) {
+            // Créer le nombre spécifié d'articles de commande pour chaque commande
+            for(Integer i = 0; i < numItemsPerOrder; i++) {
+                orderItems.add(new OrderItem(OrderId = ord.Id, UnitPrice = unitPricePerItem, Quantity = quantityPerItem));
+            }
+        }
+        insert orderItems;
+        return orderItems;
+    }
+
+        
+    // Méthode pour créer un volume massif de données de test
     public static List<Account> createMassiveData(Integer numAccounts, Integer ordersPerAccount, String productName, String productCode) {
         List<Account> accounts = new List<Account>();
     
         // Create the specified number of accounts
         for (Integer i = 0; i < numAccounts; i++) {
-        accounts.add(new Account(Name = 'Test Account' + i));
+          accounts.add(new Account(Name = 'Test Account' + i));
         }
         insert accounts;
     
         // Create orders with items for each account using createOrderWithProduct
         for (Account acc : accounts) {
-        for (Integer i = 0; i < ordersPerAccount; i++) {
+          for (Integer i = 0; i < ordersPerAccount; i++) {
             TestDataFactory.createOrderWithProduct(productName, productCode, 1); // Assuming 1 item per order
         }
         }

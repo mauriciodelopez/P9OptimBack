@@ -65,42 +65,52 @@ public with sharing class TestDataFactory {
         return order;
     }
             
-    // DONE MLO
-    public static List<Account> createAccountsWithOrders(Integer numAccounts, Integer ordersPerAccount, String productName, String productCode) {
+
+    // Méthode pour créer une liste d'objets Account avec un nombre spécifié
+    public static List<Account> createAccounts(Integer numAccounts) {
         List<Account> accounts = new List<Account>();
-    
-        // Create the specified number of accounts with orders
-        for (Integer i = 0; i < numAccounts; i++) {
-        Account acc = new Account();
-        acc.Name = 'Test Account ' + (i + 1);
-        accounts.add(acc);
-    
-        // Create orders for this account using createOrderWithProduct
-        for (Integer j = 0; j < ordersPerAccount; j++) {
-            createOrderWithProduct(productName, productCode, 1, acc.Id); // 1 item per order
+        // Vérifier si la création d'enregistrements Account est autorisée
+        if (!Schema.sObjectType.Account.isCreateable()) {
+            throw new SecurityException('Vous n\'avez pas la permission de créer des enregistrements de compte.');
         }
-    }
-    
-        // Insert accounts (if not already inserted in createOrderWithProduct)
-        if (!accounts.isEmpty() && !accounts[0].Id != null) {
-        insert accounts;
+        // Boucler pour créer le nombre spécifié de comptes
+        for(Integer i = 0; i < numAccounts; i++) {
+            Account a = new Account();
+            a.Name = 'Test Account ' + (i + 1);
+            // Configurer d'autres champs si nécessaire
+            accounts.add(a);
         }
-    
         return accounts;
     }
-    //DONE MLO
-    public static List<Order> createOrdersForAccounts(List<Account> accounts, Integer numOrdersPerAccount, String productName, String productCode, Decimal pricePerItem) {
+
+
+    public static List<Order> createOrdersForAccounts(List<Account> accounts, Integer numOrdersPerAccount, Decimal pricePerOrder) {
         List<Order> orders = new List<Order>();
     
-        // Loop to create orders with a single item per order using createOrderWithProduct
+        // Iterar sobre cada cuenta para crear el número especificado de órdenes por cuenta
         for (Account acc : accounts) {
-        for (Integer i = 0; i < numOrdersPerAccount; i++) {
-            orders.add(createOrderWithProduct(productName, productCode, 1, acc.Id, pricePerItem)); // 1 item per order
+            for (Integer i = 0; i < numOrdersPerAccount; i++) {
+                Order ord = new Order();
+                ord.AccountId = acc.Id;
+                ord.EffectiveDate = Date.today();
+                ord.Status = 'Draft'; // Puedes ajustar el estado según tus necesidades
+                ord.NetAmount__c = pricePerOrder; // Establecer el precio de la orden
+    
+                orders.add(ord); // Agregar la orden a la lista de órdenes
+            }
         }
-        }
+    
+        // Insertar todas las órdenes para obtener sus Ids
+        insert orders;
     
         return orders;
     }
+
+
+
+    // Méthode pour créer des commandes pour un nombre spécifié de fois
+    // en les associant de manière aléatoire à des comptes spécifiés
+
         
     // Méthode pour créer un volume massif de données de test DONE MLO
     public static List<Account> createMassiveData(Integer numAccounts, Integer ordersPerAccount, String productName, String productCode) {
