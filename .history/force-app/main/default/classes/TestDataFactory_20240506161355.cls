@@ -32,7 +32,7 @@ public with sharing class TestDataFactory {
         return standardPrice;
     }
 
-    public static Account createAccount(Integer i) {
+    public static Account createAccount() {
         Account acc = new Account(
             Name = 'SFDCPanther.com' + i,// Added index to name to ensure uniqueness
             Rating = 'Hot',
@@ -46,10 +46,9 @@ public with sharing class TestDataFactory {
     public static List<Account> createAccounts(Integer numAccounts) {
         List<Account> accounts = new List<Account>();
         for(Integer i = 0; i < numAccounts; i++) {
-            Account acc = createAccount(i);
+            Account acc = createAccount();
             accounts.add(acc);
         }
-        insert accounts;//Insert all accounts at once 
         return accounts;
     }
 

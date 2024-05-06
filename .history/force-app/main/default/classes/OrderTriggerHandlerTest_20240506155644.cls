@@ -50,4 +50,3 @@ public class OrderTriggerHandlerTest {
     }
 }
 
-//En este código, he agregado la creación de un OrderItem a tus datos de prueba. Esto debería hacer que TotalAmount se calcule automáticamente cuando insertas el OrderItem. Luego, en tus pruebas, verifico que NetAmount__c y Chiffre_d_affaire__c se calculen correctamente en base a TotalAmount.

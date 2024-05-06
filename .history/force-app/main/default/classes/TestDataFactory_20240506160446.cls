@@ -32,24 +32,23 @@ public with sharing class TestDataFactory {
         return standardPrice;
     }
 
-    public static Account createAccount(Integer i) {
+    public static Account createAccount() {
         Account acc = new Account(
-            Name = 'SFDCPanther.com' + i,// Added index to name to ensure uniqueness
+            Name = 'SFDCPanther.com',
             Rating = 'Hot',
             Industry = 'Banking',
             Phone = '9087654321'
         );
-        //insert acc;
+        insert acc;
         return acc;
     }
 
     public static List<Account> createAccounts(Integer numAccounts) {
         List<Account> accounts = new List<Account>();
         for(Integer i = 0; i < numAccounts; i++) {
-            Account acc = createAccount(i);
+            Account acc = createAccount();
             accounts.add(acc);
         }
-        insert accounts;//Insert all accounts at once 
         return accounts;
     }
 
@@ -73,18 +72,6 @@ public with sharing class TestDataFactory {
         lineItem.PricebookEntryId = pricebookEntryId;
         insert lineItem;
         return lineItem;
-    }
-
-    public static List<Order> createOrdersForAccounts(List<Account> accounts, Integer numOrdersPerAccount, Decimal orderAmount) {
-        List<Order> orders = new List<Order>();
-        for(Account acc : accounts) {
-            for(Integer i = 0; i < numOrdersPerAccount; i++) {
-                Order ord = createOrder(acc.Id); // Assuming createOrder creates an order with a specified accountId
-                // Set order amount here if necessary
-                orders.add(ord);
-            }
-        }
-        return orders;
     }
 
     public static Order activateOrder(Id orderId) {
