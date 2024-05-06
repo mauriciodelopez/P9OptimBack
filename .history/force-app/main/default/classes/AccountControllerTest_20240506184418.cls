@@ -22,7 +22,7 @@ public class AccountControllerTest {
         controller.updateChiffreDAffaire(null);
 
         // Assertions
-        System.assertEquals(true, true, 'test'); // Assert debug message logged for null list
+        System.assertEquals(true, true,); // Assert debug message logged for null list
     }
 
     @isTest
@@ -36,7 +36,7 @@ public class AccountControllerTest {
         controller.updateChiffreDAffaire(accounts);
 
         // Assertions
-        System.assertEquals(true, true, 'test'); // Assert debug message logged for null account
+        System.assertEquals(true, true); // Assert debug message logged for null account
     }
 
     @isTest

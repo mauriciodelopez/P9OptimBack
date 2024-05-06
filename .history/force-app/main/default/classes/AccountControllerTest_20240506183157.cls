@@ -16,17 +16,17 @@ public class AccountControllerTest {
     }
 
     @isTest
-    static void testUpdateChiffreDAffaireNullList() {
+    static void testUpdateChiffreDAffaire_nullList() {
         // Test null list of accounts
         AccountController controller = new AccountController();
         controller.updateChiffreDAffaire(null);
 
         // Assertions
-        System.assertEquals(true, true, 'test'); // Assert debug message logged for null list
+        System.assertEquals(true, true); // Assert debug message logged for null list
     }
 
     @isTest
-    static void testUpdateChiffreDAffaireNullAccount() {
+    static void testUpdateChiffreDAffaire_nullAccount() {
         // Test list containing a null account
         List<Account> accounts = new List<Account>();
         accounts.add(null);
@@ -36,11 +36,11 @@ public class AccountControllerTest {
         controller.updateChiffreDAffaire(accounts);
 
         // Assertions
-        System.assertEquals(true, true, 'test'); // Assert debug message logged for null account
+        System.assertEquals(true, true); // Assert debug message logged for null account
     }
 
     @isTest
-    static void testUpdateChiffreDAffaireSuccessNoOrders() {
+    static void testUpdateChiffreDAffaire_success_noOrders() {
         // Test with accounts having no associated orders
         List<Account> accounts = TestDataFactory.createAccounts(2);
 
@@ -55,7 +55,7 @@ public class AccountControllerTest {
     }
 
     @isTest
-    static void testUpdateChiffreDAffaireSuccessWithOrders() {
+    static void testUpdateChiffreDAffaire_success_WithOrders() {
         // Test with accounts having associated orders
         List<Account> accounts = TestDataFactory.createAccounts(2);
         List<Order> orders = TestDataFactory.createOrdersForAccounts(accounts, 2, 150.00);

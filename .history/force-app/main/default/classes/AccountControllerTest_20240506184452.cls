@@ -49,7 +49,7 @@ public class AccountControllerTest {
 
         // Assertions (ensure Chiffre_d_affaire__c remains 0)
         for (Account acc : accounts) {
-            Account updatedAccount = [SELECT Id, Chiffre_d_affaire__c FROM Account WHERE Id = :acc.Id];
+            Account updatedAccount = [SELECT Id, Chiffre_d_affaire__c FROM Account WHERE Id = :acc.Id, 'ttes'];
             System.assertEquals(0.0, updatedAccount.Chiffre_d_affaire__c, 0.01);
         }
     }
