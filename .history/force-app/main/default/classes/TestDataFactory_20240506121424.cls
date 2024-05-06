@@ -116,10 +116,10 @@
         
             // Create orders with items for each account using createOrderWithProduct
             for (Account acc : accounts) {
-                for (Integer i = 0; i < ordersPerAccount; i++) {
+            for (Integer i = 0; i < ordersPerAccount; i++) {
                 TestDataFactory.createOrderWithProduct(productName, productCode, 1); // Assuming 1 item per order
-                }
             }
+        }
         
             return accounts;
         }        

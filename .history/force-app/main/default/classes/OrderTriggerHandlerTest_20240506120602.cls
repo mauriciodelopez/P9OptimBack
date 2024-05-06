@@ -33,7 +33,7 @@ public class OrderTriggerHandlerTest {
 
         // Vérifiez les résultats
         for (Order ord : [SELECT Id, TotalAmount, ShipmentCost__c, NetAmount__c FROM Order]) {
-            System.assertNotEquals(0, ord.NetAmount__c, 'NetAmount__c should not be 0');
+            System.assertNotEquals(0, ord.NetAmount__c);
         }
     }
 
@@ -57,7 +57,7 @@ public class OrderTriggerHandlerTest {
 
         // Vérifiez les résultats
         for (Account acc : [SELECT Id, Chiffre_d_affaire__c FROM Account]) {
-            System.assertNotEquals(accounts.get(acc.Id).Chiffre_d_affaire__c, acc.Chiffre_d_affaire__c, 'Chiffre_d_affaire__c should have changed');
+            System.assertNotEquals(accounts.get(acc.Id).Chiffre_d_affaire__c, acc.Chiffre_d_affaire__c);
         }
     }
 }
