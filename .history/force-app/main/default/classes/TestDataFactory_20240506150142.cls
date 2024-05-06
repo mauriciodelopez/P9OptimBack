@@ -17,9 +17,7 @@ public with sharing class TestDataFactory {
         return p;    
     }
 
-    public static Product2 createProduct() {
-        return createProduct('Test Product', 'Test Product', 'ABC', true);
-    }    
+    
 
     public static PricebookEntry createPricebookEntry(Id productId) {
         PricebookEntry standardPrice = new PricebookEntry();
@@ -54,7 +52,7 @@ public with sharing class TestDataFactory {
         return order;
     }
 
-    public static OrderItem createOrderItem(Id orderId, Id productId, Id pricebookEntryId, Decimal quantity, Decimal unitPrice) {
+    public static OrderItem createOrderItem(Id orderId, Id productId, Id pricebookEntryId, Decimal quantity = 24, Decimal unitPrice = 240) {
         OrderItem lineItem = new OrderItem();
         lineItem.OrderId = orderId;
         lineItem.Quantity = quantity;

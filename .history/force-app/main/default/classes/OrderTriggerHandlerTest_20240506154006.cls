@@ -10,31 +10,35 @@ public class OrderTriggerHandlerTest {
     @isTest static void testBeforeUpdate() {
         // Preparar datos de prueba
         Account acc = TestDataFactory.createAccount();
-        Product2 prod = TestDataFactory.createProduct();
-        PricebookEntry pbe = TestDataFactory.createPricebookEntry(prod.Id);
+        insert acc;
+        
         Order ord = TestDataFactory.createOrder(acc.Id);
-        TestDataFactory.createOrderItem(ord.Id, prod.Id, pbe.Id, 1, 100);
+        ord.TotalAmount = 100;
+        ord.ShipmentCost__c = 10;
+        update ord;
         
         // Actualizar el pedido para disparar el código beforeUpdate
         Test.startTest();
-        ord.ShipmentCost__c = 10;
+        ord.Status = 'Ordered';
         update ord;
         Test.stopTest();
         
         // Recuperar el pedido actualizado
-        ord = [SELECT NetAmount__c, TotalAmount FROM Order WHERE Id = :ord.Id];
+        ord = [SELECT NetAmount__c FROM Order WHERE Id = :ord.Id];
         
         // Verificar que NetAmount__c se calculó correctamente
-        System.assertEquals(ord.TotalAmount - ord.ShipmentCost__c, ord.NetAmount__c, 'NetAmount__c no se calculó correctamente');
+        System.assertEquals(90, ord.NetAmount__c, 'NetAmount__c no se calculó correctamente');
     }
-
+    
     @isTest static void testAfterUpdate() {
         // Preparar datos de prueba
         Account acc = TestDataFactory.createAccount();
-        Product2 prod = TestDataFactory.createProduct();
-        PricebookEntry pbe = TestDataFactory.createPricebookEntry(prod.Id);
+        acc.Chiffre_d_affaire__c = 0;
+        insert acc;
+        
         Order ord = TestDataFactory.createOrder(acc.Id);
-        TestDataFactory.createOrderItem(ord.Id, prod.Id, pbe.Id, 1, 100);
+        //ord.TotalAmount = 100; no se 
+        update ord;
         
         // Actualizar el pedido para disparar el código afterUpdate
         Test.startTest();
@@ -46,6 +50,6 @@ public class OrderTriggerHandlerTest {
         acc = [SELECT Chiffre_d_affaire__c FROM Account WHERE Id = :acc.Id];
         
         // Verificar que Chiffre_d_affaire__c se actualizó correctamente
-        System.assertEquals(ord.TotalAmount, acc.Chiffre_d_affaire__c, 'Chiffre_d_affaire__c no se actualizó correctamente');
+        System.assertEquals(100, acc.Chiffre_d_affaire__c, 'Chiffre_d_affaire__c no se actualizó correctamente');
     }
 }

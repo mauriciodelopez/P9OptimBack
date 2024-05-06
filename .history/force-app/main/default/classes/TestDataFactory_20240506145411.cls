@@ -7,19 +7,15 @@
 **/
 @isTest
 public with sharing class TestDataFactory {
-    public static Product2 createProduct(String name, String description, String productCode, Boolean isActive) {
+    public static Product2 createProduct(String name = 'Test Product', String description = 'Test Product', String productCode = 'ABC', Boolean isActive = true) {
         Product2 p = new Product2();
-        p.Name = name;
-        p.Description = description;
-        p.productCode = productCode;
-        p.isActive = isActive;
+        p.Name = 'Test Product';
+        p.Description='Test Product';
+        p.productCode = 'ABC';
+        p.isActive = true;
         insert p;
-        return p;    
+        return p;
     }
-
-    public static Product2 createProduct() {
-        return createProduct('Test Product', 'Test Product', 'ABC', true);
-    }    
 
     public static PricebookEntry createPricebookEntry(Id productId) {
         PricebookEntry standardPrice = new PricebookEntry();
@@ -54,11 +50,11 @@ public with sharing class TestDataFactory {
         return order;
     }
 
-    public static OrderItem createOrderItem(Id orderId, Id productId, Id pricebookEntryId, Decimal quantity, Decimal unitPrice) {
+    public static OrderItem createOrderItem(Id orderId, Id productId, Id pricebookEntryId) {
         OrderItem lineItem = new OrderItem();
         lineItem.OrderId = orderId;
-        lineItem.Quantity = quantity;
-        lineItem.UnitPrice = unitPrice;
+        lineItem.Quantity = 24;
+        lineItem.UnitPrice = 240;
         lineItem.Product2id = productId;
         lineItem.PricebookEntryId = pricebookEntryId;
         insert lineItem;
