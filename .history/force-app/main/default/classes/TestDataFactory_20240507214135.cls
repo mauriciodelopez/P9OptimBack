@@ -7,7 +7,7 @@
 **/
 @isTest
 public with sharing class TestDataFactory {
-    public static Product2 createProduct(String name, String description, String productCode, Boolean isActive) {
+    public static Product2 createProduct(String name, String description, String productCode, Boolean isActive, Id pricebookId) {
         Product2 p = new Product2();
         p.Name = name;
         p.Description = description;
@@ -24,7 +24,7 @@ public with sharing class TestDataFactory {
 
     public static Product2 createProduct() {
         Id pricebookId = Test.getStandardPricebookId();
-        return TestDataFactory.createProduct('Test Product', 'Test Product', 'ABC', true);
+        return TestDataFactory.createProduct('Test Product', 'Test Product', 'ABC', true, pricebookId);
     }    
 
     public static PricebookEntry createPricebookEntry(Id productId) {
@@ -81,7 +81,7 @@ public with sharing class TestDataFactory {
         return lineItem;
     }
 
-    public static List<Order> createOrdersForAccounts(List<Account> accounts, Integer numOrdersPerAccount) {
+    public static List<Order> createOrdersForAccounts(List<Account> accounts, Integer numOrdersPerAccount, Id pricebook2Id) {
         List<Order> orders = new List<Order>();
         //List<OrderItem> orderItems = new List<OrderItem>();
         for(Account acc : accounts) {
@@ -90,7 +90,7 @@ public with sharing class TestDataFactory {
                     AccountId = acc.Id,
                     EffectiveDate = System.today(),
                     Status = 'Draft',
-                    Pricebook2Id = Test.getStandardPricebookId();
+                    Pricebook2Id = pricebook2Id
                     ); // Assuming createOrder creates an order with a specified accountId
                 // Set order amount here if necessary
                 orders.add(ord);
@@ -146,12 +146,12 @@ public with sharing class TestDataFactory {
         List<Order> orders = new List<Order>();
 
         // Get the standard pricebook ID
-        Id pricebookId = Test.getStandardPricebookId();
+        Id pricebookId = et
 
         
 
         //Creation d'orders
-        orders = TestDataFactory.createOrdersForAccounts(accounts, 1);
+        orders = TestDataFactory.createOrdersForAccounts(accounts, 1, pricebookId);
 
     
             // Create the specified number of order items associated with the order

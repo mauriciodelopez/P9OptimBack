@@ -20,7 +20,7 @@ public class AccountControllerTest {
         TestDataFactory.createOrdersForAccounts(accounts, 2);
 
         // Create two order items for each account
-        TestDataFactory.createOrderItemsForAccounts(accounts, 2);
+        TestDataFactory.createOrderItemsForAccounts(accounts, 2, pricebookId);
     }
 
     @isTest

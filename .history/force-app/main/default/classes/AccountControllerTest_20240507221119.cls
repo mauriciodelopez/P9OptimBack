@@ -14,13 +14,13 @@ public class AccountControllerTest {
 
         // Get the standard pricebook ID
         Id pricebookId = [SELECT Id FROM Pricebook2 WHERE IsStandard = true LIMIT 1].Id;
-        
+        x
 
         // Create two orders for each account
-        TestDataFactory.createOrdersForAccounts(accounts, 2);
+        TestDataFactory.createOrdersForAccounts(accounts, 2, pricebookId);
 
         // Create two order items for each account
-        TestDataFactory.createOrderItemsForAccounts(accounts, 2);
+        TestDataFactory.createOrderItemsForAccounts(accounts, 2, pricebookId);
     }
 
     @isTest

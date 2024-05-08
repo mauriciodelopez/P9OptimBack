@@ -13,14 +13,14 @@ public class AccountControllerTest {
         List<Account> accounts = TestDataFactory.createAccounts(200);
 
         // Get the standard pricebook ID
-        Id pricebookId = [SELECT Id FROM Pricebook2 WHERE IsStandard = true LIMIT 1].Id;
-        
+        Id pricebookId = test.getStandardPricebookId();
+        //[SELECT Id FROM Pricebook2 WHERE IsStandard = true LIMIT 1].Id;
 
         // Create two orders for each account
-        TestDataFactory.createOrdersForAccounts(accounts, 2);
+        TestDataFactory.createOrdersForAccounts(accounts, 2, pricebookId);
 
         // Create two order items for each account
-        TestDataFactory.createOrderItemsForAccounts(accounts, 2);
+        TestDataFactory.createOrderItemsForAccounts(accounts, 2, pricebookId);
     }
 
     @isTest
@@ -42,7 +42,7 @@ public class AccountControllerTest {
         List<Account> updatedAccounts = [SELECT Id, Chiffre_d_affaire__c FROM Account WHERE Id IN :accounts];
 
         // Vérifiez que le champ Chiffre_d_affaire__c a été correctement mis à jour
-        System.assertEquals(100.0, updatedAccounts[0].Chiffre_d_affaire__c, 'Chiffre_d_affaire__c for the first account should be 300.0');
+        System.assertEquals(300.0, updatedAccounts[0].Chiffre_d_affaire__c, 'Chiffre_d_affaire__c for the first account should be 300.0');
         System.assertEquals(700.0, updatedAccounts[1].Chiffre_d_affaire__c, 'Chiffre_d_affaire__c for the second account should be 700.0');
     }
 }

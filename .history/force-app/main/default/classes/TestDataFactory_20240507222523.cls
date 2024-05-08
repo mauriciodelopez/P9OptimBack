@@ -90,7 +90,7 @@ public with sharing class TestDataFactory {
                     AccountId = acc.Id,
                     EffectiveDate = System.today(),
                     Status = 'Draft',
-                    Pricebook2Id = Test.getStandardPricebookId();
+                    Pricebook2Id = test.
                     ); // Assuming createOrder creates an order with a specified accountId
                 // Set order amount here if necessary
                 orders.add(ord);
