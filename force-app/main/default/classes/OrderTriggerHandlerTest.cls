@@ -2,18 +2,34 @@
  * @description       : 
  * @author            : ChangeMeIn@UserSettingsUnder.SFDoc
  * @group             : 
- * @last modified on  : 05-06-2024
+ * @last modified on  : 05-17-2024
  * @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
 **/
 @isTest
 public class OrderTriggerHandlerTest {
+    @TestSetup static void setup(){
+        // Crear 200 cuentas de prueba
+        List<Account> accounts = TestDataFactory.createAccounts(200);
+
+        // Crear una orden de prueba para cada cuenta
+        List<Order> orders = new List<Order>();
+        for(Account acc : accounts) {
+            Order ord = TestDataFactory.createOrder(acc.Id, 'Draft');
+            orders.add(ord);
+        }
+        insert orders;
+
+        Product2 product = TestDataFactory.createProduct('Test Product', 'Test Family');
+        PricebookEntry pbe = TestDataFactory.createPricebookEntry(product, 1);
+
+        // Crear un artículo de orden para cada orden
+        TestDataFactory.createOrderItems(orders, pbe.Id, 1, 100);
+    }
+    
     @isTest static void testBeforeUpdate() {
         // Preparar datos de prueba
-        Account acc = TestDataFactory.createAccount();
-        Product2 prod = TestDataFactory.createProduct();
-        PricebookEntry pbe = TestDataFactory.createPricebookEntry(prod.Id);
-        Order ord = TestDataFactory.createOrder(acc.Id);
-        TestDataFactory.createOrderItem(ord.Id, prod.Id, pbe.Id, 1, 100);
+        Account acc = [SELECT Id FROM Account LIMIT 1];
+        Order ord = [SELECT Id, ShipmentCost__c, NetAmount__c, TotalAmount FROM Order WHERE AccountId = :acc.Id LIMIT 1];
         
         // Actualizar el pedido para disparar el código beforeUpdate
         Test.startTest();
@@ -22,7 +38,7 @@ public class OrderTriggerHandlerTest {
         Test.stopTest();
         
         // Recuperar el pedido actualizado
-        ord = [SELECT NetAmount__c, TotalAmount FROM Order WHERE Id = :ord.Id];
+        ord = [SELECT NetAmount__c, TotalAmount, ShipmentCost__c FROM Order WHERE Id = :ord.Id];
         
         // Verificar que NetAmount__c se calculó correctamente
         System.assertEquals(ord.TotalAmount - ord.ShipmentCost__c, ord.NetAmount__c, 'NetAmount__c no se calculó correctamente');
@@ -30,11 +46,9 @@ public class OrderTriggerHandlerTest {
 
     @isTest static void testAfterUpdate() {
         // Preparar datos de prueba
-        Account acc = TestDataFactory.createAccount();
-        Product2 prod = TestDataFactory.createProduct();
-        PricebookEntry pbe = TestDataFactory.createPricebookEntry(prod.Id);
-        Order ord = TestDataFactory.createOrder(acc.Id);
-        TestDataFactory.createOrderItem(ord.Id, prod.Id, pbe.Id, 1, 100);
+        Account acc = [SELECT Id FROM Account LIMIT 1];
+        Order ord = [SELECT Id, Status, TotalAmount FROM Order WHERE AccountId = :acc.Id LIMIT 1];
+
         
         // Actualizar el pedido para disparar el código afterUpdate
         Test.startTest();
@@ -49,5 +63,3 @@ public class OrderTriggerHandlerTest {
         System.assertEquals(ord.TotalAmount, acc.Chiffre_d_affaire__c, 'Chiffre_d_affaire__c no se actualizó correctamente');
     }
 }
-
-//En este código, he agregado la creación de un OrderItem a tus datos de prueba. Esto debería hacer que TotalAmount se calcule automáticamente cuando insertas el OrderItem. Luego, en tus pruebas, verifico que NetAmount__c y Chiffre_d_affaire__c se calculen correctamente en base a TotalAmount.
