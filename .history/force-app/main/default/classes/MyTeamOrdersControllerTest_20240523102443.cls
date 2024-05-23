@@ -5,10 +5,6 @@
  * @last modified on  : 05-23-2024
  * @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
 **/
-
-//Cette classe teste test la classe MyTeamOrdersController
-//Ce test vérifie que la summ total des orders dans MyTeamOrdersController
-//est correcte après avoir créer et configurer des test orders
 @isTest
 public class MyTeamOrdersControllerTest {
     @testSetup
@@ -40,7 +36,7 @@ public class MyTeamOrdersControllerTest {
         // Creation une instance de MyTeamOrdersController
         MyTeamOrdersController controller = new MyTeamOrdersController();
 
-        // Verification que la summ des orders est correcte
+        // Verificar que la suma de las órdenes es correcta
         System.assertEquals(200.0, controller.sumOrders, 'La Somme des ordres nest pas correcte');
     }
 }

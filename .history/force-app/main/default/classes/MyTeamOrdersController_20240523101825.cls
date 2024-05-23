@@ -5,8 +5,7 @@
  * @last modified on  : 05-23-2024
  * @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
 **/
-//Cette classe calcule la somme des montants totaux des commandes 'Ordered' pour l'équipe de 
-//l'utilisateur et l'utilisateur lui-même (si l'objet User est accessible).
+
 public without sharing class MyTeamOrdersController {
     public Decimal sumOrders { get; set; } 
 

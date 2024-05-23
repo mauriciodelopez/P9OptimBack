@@ -5,10 +5,6 @@
  * @last modified on  : 05-23-2024
  * @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
 **/
-
-//Cette classe teste test la classe MyTeamOrdersController
-//Ce test vérifie que la summ total des orders dans MyTeamOrdersController
-//est correcte après avoir créer et configurer des test orders
 @isTest
 public class MyTeamOrdersControllerTest {
     @testSetup

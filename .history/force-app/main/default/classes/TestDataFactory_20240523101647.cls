@@ -73,12 +73,12 @@ public with sharing class TestDataFactory {
         return orderItems;
     }
     
+    /*
+    private static List<Id> getAccountIds(List<Account> accounts) {
+        List<Id> accountIds = new List<Id>();
+        for(Account acc : accounts) {
+            accountIds.add(acc.Id);
+        }
+        return accountIds;
+    }
 }
-
-
-
-
-
-
-
-
