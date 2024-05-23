@@ -33,7 +33,7 @@ public inherited sharing class OrderTriggerHandler {
     }
     //Ce code collecte les identifiants des comptes associés aux commandes passées au statut 'Commandé', 
     //puis récupère ces comptes et leurs commandes associées, et recalcule le 'Chiffre_d_affaire__c' de chaque 
-    //compte en fonction du 'TotalAmount' de leurs commandes 'Commandé'.
+    compte en fonction du 'TotalAmount' de leurs commandes 'Commandé'.
     // Méthode qui est appelée après la mise à jour des enregistrements Order
     public static void afterUpdate(List<Order> newOrders, Map<Id, Order> oldMap) {
         // Crée un ensemble pour stocker les Ids des comptes

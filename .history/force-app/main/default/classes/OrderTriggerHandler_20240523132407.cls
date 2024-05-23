@@ -12,9 +12,7 @@
 
 // Déclaration d'une classe avec le modificateur 'inherited sharing'. Cela signifie que la classe respecte les règles de partage de l'objet pour lequel elle est utilisée.
 public inherited sharing class OrderTriggerHandler {
-    //Ce code analyse chaque order dans une liste et s'assure que les champs
-    //"Net Amount" y "Shipment Cost" ne soient pas vides, et puis calcule le 
-    //"Net Amount" soustrayand le "Shipment Cost" du "Total Amount" pour chaque order. 
+    //Ce code analyse chaque order dans une liste et s'assure
     // Méthode qui est appelée avant la mise à jour des enregistrements Order
     public static void beforeUpdate(List<Order> newOrders, Map<Id, Order> oldMap) {
         for(Order ord : newOrders){
@@ -31,9 +29,7 @@ public inherited sharing class OrderTriggerHandler {
             } 
         }
     }
-    //Ce code collecte les identifiants des comptes associés aux commandes passées au statut 'Commandé', 
-    //puis récupère ces comptes et leurs commandes associées, et recalcule le 'Chiffre_d_affaire__c' de chaque 
-    //compte en fonction du 'TotalAmount' de leurs commandes 'Commandé'.
+
     // Méthode qui est appelée après la mise à jour des enregistrements Order
     public static void afterUpdate(List<Order> newOrders, Map<Id, Order> oldMap) {
         // Crée un ensemble pour stocker les Ids des comptes
