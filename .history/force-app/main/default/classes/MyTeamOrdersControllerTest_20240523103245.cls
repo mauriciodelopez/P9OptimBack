@@ -19,7 +19,7 @@ public class MyTeamOrdersControllerTest {
         // Creation orders for test accounts
         List<Order> testOrders = TestDataFactory.createOrdersForAccounts(testAccounts);
 
-        // Creation d'un test product
+        // Creation d'un  un producto de prueba
         Product2 testProduct = TestDataFactory.createProduct('Test Product', 'Test Family');
 
         // Creation d'une pricebookentry pour le test produit
