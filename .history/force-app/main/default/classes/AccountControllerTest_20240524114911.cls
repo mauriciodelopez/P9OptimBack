@@ -1,0 +1,54 @@
+/**
+ * @description       : 
+ * @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+ * @group             : 
+ * @last modified on  : 05-24-2024
+ * @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+**/
+@isTest
+public with sharing class AccountControllerTest {
+    @testSetup
+    static void setup() {
+        // Création de 50 comptes de test
+        List<Account> accounts = TestDataFactory.createAccounts(50);
+
+        // Creación de un producto
+        Product2 product = TestDataFactory.createProduct('Test Product', 'Test Family');
+
+        // Creación de un objeto PricebookEntry para usar en la creación de OrderItems
+        PricebookEntry pricebook = TestDataFactory.createPricebookEntry(product, 100.00);
+
+        // Creación de 100 órdenes y 2 OrderItems para cada cuenta
+        List<OrderItem> allOrderItems = new List<OrderItem>();
+        for(Account acc : accounts) {
+            allOrderItems.addAll(TestDataFactory.createOrderItemsForOrders(acc.Id, 'Draft', 50, pricebook, 2));
+        }
+
+        // Actualización de las órdenes al estado 'Ordered'
+        List<Order> allOrders = [SELECT Id, Status FROM Order WHERE AccountId IN :accounts];
+        for(Order ord : allOrders) {
+            ord.Status = 'Ordered';
+        }
+        update allOrders;
+
+    }
+
+    @isTest
+    static void testUpdateChiffreDAffaire() {
+        // Obtenez les comptes créés dans la méthode @testSetup
+        List<Account> accounts = [SELECT Id, Name FROM Account];
+
+        // Créez une instance de Controller (AccountController()) et appelez la méthode updateChiffreDAffaire
+        AccountController controller = new AccountController();
+        Test.startTest();
+        controller.updateChiffreDAffaire(accounts);
+        Test.stopTest();
+
+        // Vérifiez que le champ Chiffre_d_affaire__c a été mis à jour correctement
+        List<Account> updatedAccounts = [SELECT Id, Chiffre_d_affaire__c FROM Account WHERE Id IN :accounts];
+        for(Account acc : updatedAccounts) {
+            System.assertNotEquals(null, acc.Chiffre_d_affaire__c, 'Chiffre_d_affaire__c ne doit pas être null');
+            System.assertEquals(10000.0, acc.Chiffre_d_affaire__c, 'Chiffre_d_affaire__c doit être 100.0');
+        }
+    }    
+}
