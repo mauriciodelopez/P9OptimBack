@@ -28,11 +28,11 @@ public class MyTeamOrdersControllerTest {
         // Création des order item pour les test orders
         List<OrderItem> testOrderItems = TestDataFactory.createOrderItems(testOrders, testPBE.Id, 1, 100.0);
 
-        // Update orders to Ordered status
-        for(Order ord : testOrders) {
-            ord.Status = 'Ordered';
-        }
-        update testOrders;
+        
+        
+        
+        
+        
     }
 
     @isTest

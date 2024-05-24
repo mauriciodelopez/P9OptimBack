@@ -26,10 +26,10 @@ public with sharing class AccountControllerTest {
         TestDataFactory.createOrderItems(orders, pbe.Id, 1, 100, 2);
 
         // Update orders to Ordered status
-        for(Order ord : orders) {
+        for(Order ord : accounts) {
             ord.Status = 'Ordered';
         }
-        update orders;
+            update accounts;
         
 
     }

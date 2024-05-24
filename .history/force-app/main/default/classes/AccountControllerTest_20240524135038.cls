@@ -29,7 +29,7 @@ public with sharing class AccountControllerTest {
         for(Order ord : orders) {
             ord.Status = 'Ordered';
         }
-        update orders;
+        update accounts;
         
 
     }
