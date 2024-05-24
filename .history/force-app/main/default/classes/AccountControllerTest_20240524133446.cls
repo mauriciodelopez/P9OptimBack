@@ -42,7 +42,7 @@ public with sharing class AccountControllerTest {
         List<Account> updatedAccounts = [SELECT Id, Chiffre_d_affaire__c FROM Account WHERE Id IN :accounts];
         for(Account acc : updatedAccounts) {
             System.assertNotEquals(null, acc.Chiffre_d_affaire__c, 'Chiffre_d_affaire__c should not be null');
-            System.assertEquals(40000.0, acc.Chiffre_d_affaire__c, 'Chiffre_d_affaire__c should be 40000.0');
+            System.assertEquals(80000.0, acc.Chiffre_d_affaire__c, 'Chiffre_d_affaire__c should be 80000.0');
 
         }
     }    

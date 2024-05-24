@@ -10,7 +10,7 @@ public with sharing class AccountControllerTest {
     @testSetup
     static void setup() {
         // Creation of test accounts 
-        List<Account> accounts = TestDataFactory.createAccounts(2);
+        List<Account> accounts = TestDataFactory.createAccounts(200);
         
 
         // Creation orders for the accounts 
@@ -42,7 +42,7 @@ public with sharing class AccountControllerTest {
         List<Account> updatedAccounts = [SELECT Id, Chiffre_d_affaire__c FROM Account WHERE Id IN :accounts];
         for(Account acc : updatedAccounts) {
             System.assertNotEquals(null, acc.Chiffre_d_affaire__c, 'Chiffre_d_affaire__c should not be null');
-            System.assertEquals(40000.0, acc.Chiffre_d_affaire__c, 'Chiffre_d_affaire__c should be 40000.0');
+            System.assertEquals(80000.0, acc.Chiffre_d_affaire__c, 'Chiffre_d_affaire__c should be 200.0');
 
         }
     }    
